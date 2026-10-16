@@ -9,7 +9,9 @@
     "lint": "eslint",
     "lighthouse": "node scripts/run-lighthouse.mjs",
     "db:push": "prisma db push",
-    "db:seed": "node prisma/seed.mjs"
+    "db:seed": "node prisma/seed.mjs",
+    "postinstall": "prisma generate",
+    "build:demo": "DATABASE_URL=file:./demo.db prisma db push --skip-generate && DATABASE_URL=file:./demo.db node prisma/seed.mjs && next build"
   },
   "dependencies": {
     "@prisma/client": "^5.22.0",

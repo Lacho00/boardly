@@ -15,7 +15,7 @@ export async function GET() {
 
   const { doc, font, bold } = await createDoc()
   let page = doc.addPage([W, H])
-  let y: number
+  let y = 0
   let pageNum = 1
 
   function drawHeader() {
