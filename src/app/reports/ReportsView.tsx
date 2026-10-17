@@ -78,7 +78,7 @@ export function ReportsView({ header }: { header: ReactNode }) {
           Object.entries(grouped).sort().reverse().map(([period, items]) => (
             <div key={period} className="mb-8">
               <h2 className="mb-3 font-display text-lg font-bold tracking-tight">{period}</h2>
-              <div className="grid gap-3">
+              <div className="grid grid-cols-[minmax(0,1fr)] gap-3">
                 {items.map(r => (
                   <div key={r.id} className="rounded-lg border border-line bg-panel p-4 flex flex-wrap items-center justify-between gap-3">
                     <div className="min-w-0">
