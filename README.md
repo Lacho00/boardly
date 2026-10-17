@@ -1,5 +1,7 @@
 # Boardly
 
+[![CI](https://github.com/Lacho00/boardly/actions/workflows/ci.yml/badge.svg?branch=dev)](https://github.com/Lacho00/boardly/actions/workflows/ci.yml) [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
 Monitor performance, uptime, SSL and SEO for several websites from one dashboard. Built with Next.js, React and Prisma.
 
 **[Live demo](https://boardly-silk.vercel.app)**: read-only, with fictional data. Scans, edits and alerts are disabled.
@@ -49,3 +51,7 @@ src/app/               pages (dashboard, alerts, reports, settings) and API rout
 src/lib/               collectors, notifier, PDF helpers
 scripts/               local Lighthouse runner
 ```
+
+## License
+
+[MIT](LICENSE)
