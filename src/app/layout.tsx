@@ -1,7 +1,9 @@
 import type { Metadata, Viewport } from "next";
 import { JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import "./globals.css";
+import { cookies } from "next/headers";
 import { isDemo } from "@/lib/demo";
+import { parseTheme, THEME_COOKIE } from "@/lib/theme";
 
 const jetbrainsMono = JetBrains_Mono({
   variable: "--font-mono-ui",
@@ -26,14 +28,16 @@ export const viewport: Viewport = {
   ],
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const theme = parseTheme((await cookies()).get(THEME_COOKIE)?.value);
   return (
     <html
       lang="en"
+      data-theme={theme ?? undefined}
       className={`${jetbrainsMono.variable} ${spaceGrotesk.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
