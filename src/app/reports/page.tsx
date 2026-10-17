@@ -53,12 +53,12 @@ export default function ReportsPage() {
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Link href="/" className="text-blue-400 hover:underline text-sm">← Dashboard</Link>
-            <h1 className="text-xl font-bold">Reportes Mensuales</h1>
+            <h1 className="text-xl font-bold">Monthly Reports</h1>
           </div>
           <div className="flex gap-2">
-            <a href="/api/report-preview/general" target="_blank" className="bg-zinc-700 hover:bg-zinc-600 px-3 py-2 rounded text-sm">PDF General</a>
+            <a href="/api/report-preview/general" target="_blank" className="bg-zinc-700 hover:bg-zinc-600 px-3 py-2 rounded text-sm">General PDF</a>
             <button onClick={generate} disabled={generating} className="bg-blue-700 hover:bg-blue-600 px-4 py-2 rounded text-sm disabled:opacity-50">
-              {generating ? 'Generando...' : 'Generar reporte mensual'}
+              {generating ? 'Generating...' : 'Generate monthly report'}
             </button>
           </div>
         </div>
@@ -66,7 +66,7 @@ export default function ReportsPage() {
 
       <main className="max-w-6xl mx-auto p-6">
         {Object.entries(grouped).length === 0 ? (
-          <p className="text-zinc-500 text-center py-20">No hay reportes todavía</p>
+          <p className="text-zinc-500 text-center py-20">No reports yet</p>
         ) : (
           Object.entries(grouped).sort().reverse().map(([period, items]) => (
             <div key={period} className="mb-8">
@@ -79,9 +79,9 @@ export default function ReportsPage() {
                       <p className="text-xs text-zinc-400">{r.site.url}</p>
                     </div>
                     <div className="flex gap-3 items-center">
-                      <MetricBadge label="Rendimiento" value={r.avgPerformance} />
+                      <MetricBadge label="Performance" value={r.avgPerformance} />
                       <MetricBadge label="SEO" value={r.avgSeo} />
-                      <MetricBadge label="Accesibilidad" value={r.avgAccessibility} />
+                      <MetricBadge label="Accessibility" value={r.avgAccessibility} />
                       <MetricBadge label="Uptime" value={r.uptime} isUptime />
                       <a
                         href={`/api/report-preview/${r.siteId}`}

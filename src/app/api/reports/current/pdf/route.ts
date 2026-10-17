@@ -20,17 +20,17 @@ export async function GET() {
 
   function drawHeader() {
     box(page, 0, H - 80, W, 80, C.hd)
-    page.drawText('Dashboard Centralizado', { x: M, y: H - 50, size: 20, font: bold, color: clr(C.hf) })
-    page.drawText(`Reporte en vivo · ${new Date().toLocaleDateString('es', { year: 'numeric', month: 'long', day: 'numeric' })}`, {
+    page.drawText('Centralized Dashboard', { x: M, y: H - 50, size: 20, font: bold, color: clr(C.hf) })
+    page.drawText(`Live report · ${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}`, {
       x: M, y: H - 70, size: 10, font, color: clr(C.mt),
     })
-    page.drawText(`${sites.length} sitios`, { x: W - M - 60, y: H - 50, size: 9, font, color: clr(C.mt) })
+    page.drawText(`${sites.length} sites`, { x: W - M - 60, y: H - 50, size: 9, font, color: clr(C.mt) })
     y = H - 100
   }
 
   function drawFooter() {
     page.drawLine({ start: { x: M, y: 42 }, end: { x: M + CW, y: 42 }, thickness: 0.5, color: clr(C.bd) })
-    page.drawText(`Página ${pageNum} · Dashboard Centralizado · ${new Date().toLocaleString()}`, {
+    page.drawText(`Page ${pageNum} · Centralized Dashboard · ${new Date().toLocaleString('en-US')}`, {
       x: M, y: 28, size: 7, font, color: clr(C.mt),
     })
   }
@@ -52,14 +52,14 @@ export async function GET() {
 
   const scw = (CW - 24) / 4
   card(page, font, bold, M, y, scw, 50, 'Total', String(total), C.bl)
-  card(page, font, bold, M + (scw + 8), y, scw, 50, 'Saludables', String(healthy), C.gr)
-  card(page, font, bold, M + 2 * (scw + 8), y, scw, 50, 'Advertencia', String(warning), C.yw)
+  card(page, font, bold, M + (scw + 8), y, scw, 50, 'Healthy', String(healthy), C.gr)
+  card(page, font, bold, M + 2 * (scw + 8), y, scw, 50, 'Warning', String(warning), C.yw)
   card(page, font, bold, M + 3 * (scw + 8), y, scw, 50, 'Error', String(errors), C.rd)
   y -= 72
 
   // ── Table ──
   const cols = [M, M + 130, M + 205, M + 275, M + 340, M + 405]
-  const colLabels = ['Sitio', 'Estado', 'Rend.', 'LCP', 'Acc.', 'SEO']
+  const colLabels = ['Site', 'Status', 'Perf.', 'LCP', 'Acc.', 'SEO']
   const rowH = 26
 
   function drawTableHeader() {

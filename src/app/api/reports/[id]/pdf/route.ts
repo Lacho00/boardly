@@ -20,12 +20,12 @@ export async function GET(
   const page = doc.addPage([W, H])
   let y: number
 
-  const monthName = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
-    'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'][report.month - 1]
+  const monthName = ['January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'][report.month - 1]
 
   // ── Header ──
   box(page, 0, H - 80, W, 80, C.hd)
-  page.drawText('Reporte Mensual', { x: M, y: H - 50, size: 22, font: bold, color: clr(C.hf) })
+  page.drawText('Monthly Report', { x: M, y: H - 50, size: 22, font: bold, color: clr(C.hf) })
   page.drawText(`${monthName} ${report.year}`, { x: M, y: H - 70, size: 11, font, color: clr(C.mt) })
   y = H - 100
 
@@ -36,13 +36,13 @@ export async function GET(
   y -= 58
 
   // ── Metric cards ──
-  secTitle(page, bold, M, y, 'Métricas del período')
+  secTitle(page, bold, M, y, 'Period Metrics')
   y -= 24
 
   const metrics = [
-    { label: 'Rendimiento', value: report.avgPerformance != null ? `${report.avgPerformance.toFixed(0)}%` : '—', color: scoreClr(report.avgPerformance) },
+    { label: 'Performance', value: report.avgPerformance != null ? `${report.avgPerformance.toFixed(0)}%` : '—', color: scoreClr(report.avgPerformance) },
     { label: 'SEO', value: report.avgSeo != null ? `${report.avgSeo.toFixed(0)}%` : '—', color: scoreClr(report.avgSeo) },
-    { label: 'Accesibilidad', value: report.avgAccessibility != null ? `${report.avgAccessibility.toFixed(0)}%` : '—', color: scoreClr(report.avgAccessibility) },
+    { label: 'Accessibility', value: report.avgAccessibility != null ? `${report.avgAccessibility.toFixed(0)}%` : '—', color: scoreClr(report.avgAccessibility) },
     { label: 'Uptime', value: report.uptime != null ? `${report.uptime.toFixed(1)}%` : '—', color: report.uptime != null && report.uptime < 99.5 ? C.rd : report.uptime != null && report.uptime < 100 ? C.yw : C.gr },
   ]
 
@@ -54,13 +54,13 @@ export async function GET(
   y -= ch + 24
 
   // ── Details ──
-  secTitle(page, bold, M, y, 'Detalles')
+  secTitle(page, bold, M, y, 'Details')
   y -= 22
 
   const details: [string, string][] = [
-    ['Período', `${monthName} ${report.year}`],
-    ['Sitio', report.site.name],
-    ['Última actualización', report.createdAt ? new Date(report.createdAt).toLocaleString() : '—'],
+    ['Period', `${monthName} ${report.year}`],
+    ['Site', report.site.name],
+    ['Last updated', report.createdAt ? new Date(report.createdAt).toLocaleString('en-US') : '—'],
   ]
   details.forEach(([l, v]) => {
     box(page, M + 8, y - 16, CW - 16, 16, C.bg)
@@ -71,7 +71,7 @@ export async function GET(
 
   // ── Footer ──
   page.drawLine({ start: { x: M, y: 42 }, end: { x: M + CW, y: 42 }, thickness: 0.5, color: clr(C.bd) })
-  page.drawText(`Dashboard Centralizado · Generado el ${new Date().toLocaleString()}`, {
+  page.drawText(`Centralized Dashboard · Generated on ${new Date().toLocaleString('en-US')}`, {
     x: M, y: 28, size: 7, font, color: clr(C.mt),
   })
 
@@ -79,7 +79,7 @@ export async function GET(
   return new NextResponse(pdfBytes, {
     headers: {
       'Content-Type': 'application/pdf',
-      'Content-Disposition': `attachment; filename="reporte-${safeFilename(report.site.name)}-${report.year}-${report.month}.pdf"`,
+      'Content-Disposition': `attachment; filename="report-${safeFilename(report.site.name)}-${report.year}-${report.month}.pdf"`,
     },
   })
 }
