@@ -35,6 +35,14 @@ describe('siteSeverity', () => {
     expect(siteSeverity({ health: 'healthy', sslDays: null, sslValid: true })).toBe('healthy')
     expect(siteSeverity({ sslDays: null, sslValid: true })).toBe('unknown')
   })
+  it('without a health check, SSL alone never yields healthy', () => {
+    expect(siteSeverity({ sslValid: true, sslDays: 90 })).toBe('unknown')
+  })
+  it('without a health check, a bad SSL signal still counts', () => {
+    expect(siteSeverity({ sslValid: true, sslDays: 5 })).toBe('critical')
+    expect(siteSeverity({ sslValid: true, sslDays: 20 })).toBe('warning')
+    expect(siteSeverity({ sslValid: false })).toBe('critical')
+  })
   it('unrecognised health status gives no health signal', () => {
     expect(siteSeverity({ health: 'weird' })).toBe('unknown')
   })

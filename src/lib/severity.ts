@@ -35,5 +35,9 @@ export function siteSeverity(input: {
   sslValid?: boolean | null
   sslDays?: number | null
 }): Severity {
-  return worst([healthSeverity(input.health), sslSeverity(input.sslValid, input.sslDays)])
+  const health = healthSeverity(input.health)
+  const ssl = sslSeverity(input.sslValid, input.sslDays)
+  // No health signal: SSL alone can only make the site worse, never healthy.
+  if (health === 'unknown') return ssl === 'critical' || ssl === 'warning' ? ssl : 'unknown'
+  return worst([health, ssl])
 }
