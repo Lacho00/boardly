@@ -18,3 +18,12 @@ export async function getCriticalAlertCount() {
   const recent = await prisma.alert.findMany({ orderBy: { createdAt: 'desc' }, take: 50, select: { severity: true } })
   return recent.filter(a => a.severity === 'critical').length
 }
+
+/** Performance snapshots of the last `days` days, oldest first. */
+export async function getSnapshotHistory(siteId: string, days: number) {
+  const since = new Date(Date.now() - days * 24 * 60 * 60 * 1000)
+  return prisma.performanceSnapshot.findMany({
+    where: { siteId, checkedAt: { gte: since } },
+    orderBy: { checkedAt: 'asc' },
+  })
+}
