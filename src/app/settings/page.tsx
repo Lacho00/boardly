@@ -1,12 +1,14 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { readJson, writeOk } from '@/lib/api-client'
+import { readJson, writeError } from '@/lib/api-client'
 import Link from 'next/link'
+import { ActionMessage } from '@/components/ActionMessage'
 
 export default function SettingsPage() {
   const [webhook, setWebhook] = useState('')
   const [saved, setSaved] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     fetch('/api/config').then(r => readJson<{ slackWebhook?: string }>(r)).then(d => setWebhook(d?.slackWebhook ?? ''))
@@ -19,7 +21,9 @@ export default function SettingsPage() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ slackWebhook: webhook }),
     })
-    if (!(await writeOk(res))) return
+    const message = await writeError(res)
+    setError(message)
+    if (message) return
     setSaved(true)
     setTimeout(() => setSaved(false), 2000)
   }
@@ -52,6 +56,7 @@ export default function SettingsPage() {
           <div className="flex items-center gap-3">
             <button type="submit" className="bg-blue-700 hover:bg-blue-600 px-4 py-2 rounded text-sm">Save</button>
             {saved && <span className="text-green-400 text-sm">✓ Saved</span>}
+            <ActionMessage state={error ? { ok: false, message: error } : null} />
           </div>
         </form>
       </main>
