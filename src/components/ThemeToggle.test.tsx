@@ -24,4 +24,27 @@ describe('ThemeToggle', () => {
     expect(document.documentElement.dataset.theme).toBe('dark')
     expect(document.cookie).toContain('boardly-theme=dark')
   })
+
+  it('without a saved theme and without matchMedia, treats the system as dark', () => {
+    vi.stubGlobal('matchMedia', undefined)
+    render(<ThemeToggle initial={null} />)
+    expect(() => fireEvent.click(screen.getByRole('button'))).not.toThrow()
+    expect(document.documentElement.dataset.theme).toBe('light')
+    expect(document.cookie).toContain('boardly-theme=light')
+  })
+
+  it('without a saved theme and a dark system, switches to light', () => {
+    vi.stubGlobal('matchMedia', (q: string) => ({ matches: false, media: q }))
+    render(<ThemeToggle initial={null} />)
+    fireEvent.click(screen.getByRole('button'))
+    expect(document.documentElement.dataset.theme).toBe('light')
+    expect(document.cookie).toContain('boardly-theme=light')
+  })
+
+  it('switches light to dark', () => {
+    render(<ThemeToggle initial="light" />)
+    fireEvent.click(screen.getByRole('button', { name: 'Switch to dark theme' }))
+    expect(document.documentElement.dataset.theme).toBe('dark')
+    expect(document.cookie).toContain('boardly-theme=dark')
+  })
 })

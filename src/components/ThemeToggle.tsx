@@ -9,8 +9,10 @@ export default function ThemeToggle({ initial }: { initial: Theme | null }) {
   const [theme, setTheme] = useState<Theme | null>(initial)
 
   function toggle() {
-    const current: Theme =
-      theme ?? (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark')
+    const prefersLight =
+      typeof window.matchMedia === 'function' &&
+      window.matchMedia('(prefers-color-scheme: light)').matches
+    const current: Theme = theme ?? (prefersLight ? 'light' : 'dark')
     const next: Theme = current === 'dark' ? 'light' : 'dark'
     document.documentElement.dataset.theme = next
     document.cookie = `${THEME_COOKIE}=${next}; max-age=${ONE_YEAR}; path=/; SameSite=Lax`
