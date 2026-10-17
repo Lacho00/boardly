@@ -41,14 +41,14 @@ async function main() {
           bestPractices: clamp(s.base + 4 + noise(d, k + 7) * 6),
           lcp: +(1.2 + (100 - score) / 25 + noise(d, k + 1)).toFixed(2),
           cls: +Math.abs(0.02 + (100 - score) / 900 + noise(d, k + 2) / 40).toFixed(3),
-          ttfb: Math.round(180 + (100 - score) * 6 + noise(d, k + 3) * 80),
+          ttfb: +((180 + (100 - score) * 6 + noise(d, k + 3) * 80) / 1000).toFixed(3),
           checkedAt,
         },
       });
       await prisma.healthCheck.create({
         data: {
           siteId: site.id,
-          status: d === 12 && k === 2 ? "down" : "up",
+          status: d === 12 && k === 2 ? "error" : "healthy",
           wpVersion: "6.8.1",
           plugins: 14 + k * 3,
           responseTime: Math.round(220 + (100 - score) * 7 + noise(d, k + 4) * 90),
@@ -95,7 +95,7 @@ async function main() {
       await prisma.alert.create({
         data: {
           siteId: site.id,
-          type: "ssl",
+          type: "ssl_expiry",
           severity: "critical",
           message: `SSL certificate expires in ${s.ssl} days`,
         },

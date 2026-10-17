@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { readJson, writeOk } from '@/lib/api-client'
 
 type Report = {
   id: string
@@ -20,17 +21,20 @@ export default function ReportsPage() {
   const [generating, setGenerating] = useState(false)
 
   async function fetchReports() {
-    const data = await fetch('/api/reports').then(r => r.json())
-    setReports(data)
+    const data = await fetch('/api/reports').then(r => readJson<Report[]>(r)).catch(() => null)
+    setReports(Array.isArray(data) ? data : [])
   }
 
   useEffect(() => { fetchReports() }, [])
 
   async function generate() {
     setGenerating(true)
-    await fetch('/api/reports', { method: 'POST' })
-    await fetchReports()
-    setGenerating(false)
+    try {
+      const res = await fetch('/api/reports', { method: 'POST' })
+      if (await writeOk(res)) await fetchReports()
+    } finally {
+      setGenerating(false)
+    }
   }
 
   const grouped = reports.reduce<Record<string, Report[]>>((acc, r) => {

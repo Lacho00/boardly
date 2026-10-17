@@ -26,26 +26,29 @@ async function main() {
     chromeFlags: ['--headless', '--no-sandbox', '--disable-gpu', '--disable-dev-shm-usage'],
   })
 
-  const result = await lighthouse(site.url, {
-    port: chrome.port,
-    output: 'json',
-    onlyCategories: ['performance', 'accessibility', 'seo', 'best-practices'],
-  })
+  let result
+  try {
+    result = await lighthouse(site.url, {
+      port: chrome.port,
+      output: 'json',
+      onlyCategories: ['performance', 'accessibility', 'seo', 'best-practices'],
+    })
+  } finally {
+    await chrome.kill()
+  }
 
-  await chrome.kill()
-
-  const r = result?.lhr as any
+  const r = result?.lhr
   if (!r?.categories) {
     console.error('Lighthouse failed to produce results')
     await prisma.$disconnect()
     process.exit(1)
   }
 
-  const getScore = (cat: string) => {
+  const getScore = (cat) => {
     const c = r.categories[cat]
     return c?.score != null ? Math.round(c.score * 100) : null
   }
-  const getAudit = (id: string) => r.audits?.[id]?.numericValue ?? null
+  const getAudit = (id) => r.audits?.[id]?.numericValue ?? null
 
   const now = new Date()
 
@@ -68,8 +71,6 @@ async function main() {
   await prisma.seoAudit.create({
     data: { siteId: site.id, score: getScore('seo'), checkedAt: now },
   })
-
-  const avg = (r.categories.performance.score + r.categories.accessibility.score + r.categories.seo.score) / 3
 
   console.log(`✓ Done — Performance: ${getScore('performance')}, Accessibility: ${getScore('accessibility')}, SEO: ${getScore('seo')}`)
 
