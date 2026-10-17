@@ -1,8 +1,9 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { readJson, writeOk } from '@/lib/api-client'
+import { readJson, writeError } from '@/lib/api-client'
 import Link from 'next/link'
+import { ActionMessage } from '@/components/ActionMessage'
 
 type Report = {
   id: string
@@ -20,6 +21,7 @@ type Report = {
 export default function ReportsPage() {
   const [reports, setReports] = useState<Report[]>([])
   const [generating, setGenerating] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   async function fetchReports() {
     const data = await fetch('/api/reports').then(r => readJson<Report[]>(r)).catch(() => null)
@@ -34,7 +36,9 @@ export default function ReportsPage() {
     setGenerating(true)
     try {
       const res = await fetch('/api/reports', { method: 'POST' })
-      if (await writeOk(res)) setReports(await fetchReports())
+      const message = await writeError(res)
+      setError(message)
+      if (!message) setReports(await fetchReports())
     } finally {
       setGenerating(false)
     }
@@ -65,6 +69,7 @@ export default function ReportsPage() {
       </header>
 
       <main className="max-w-6xl mx-auto p-6">
+        <ActionMessage state={error ? { ok: false, message: error } : null} className="block mb-4 text-sm" />
         {Object.entries(grouped).length === 0 ? (
           <p className="text-zinc-500 text-center py-20">No reports yet</p>
         ) : (
