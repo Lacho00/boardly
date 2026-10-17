@@ -82,7 +82,7 @@ export function LineChart({ title, unit = '', decimals = 2, series, thresholds }
 
       <div ref={frame}>
       {!hasData ? (
-        <p className="text-sm text-zinc-500">No data in this range</p>
+        <p className="text-sm text-zinc-400">No data in this range</p>
       ) : (
         <div
           role="group"
@@ -176,7 +176,7 @@ export function LineChart({ title, unit = '', decimals = 2, series, thresholds }
         {hasData ? (
           <table className="mt-2 w-full text-left">
             <thead>
-              <tr className="text-zinc-500">
+              <tr className="text-zinc-400">
                 <th scope="col" className="py-1 pr-4 font-medium">Date</th>
                 {series.map(s => <th key={s.key} scope="col" className="py-1 pr-4 font-medium">{s.label}{unit && ` (${unit})`}</th>)}
               </tr>

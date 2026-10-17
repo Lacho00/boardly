@@ -11,7 +11,7 @@ export async function sendAlert(siteId: string, type: string, message: string, s
   const site = await prisma.site.findUnique({ where: { id: siteId } })
 
   const blocks = [
-    { type: 'header', text: { type: 'plain_text', text: `⚠️ ${severity === 'critical' ? 'CRÍTICO' : 'Alerta'}: ${site?.name}` } },
+    { type: 'header', text: { type: 'plain_text', text: `⚠️ ${severity === 'critical' ? 'CRITICAL' : 'Alert'}: ${site?.name}` } },
     { type: 'section', text: { type: 'mrkdwn', text: message } },
     { type: 'context', elements: [{ type: 'mrkdwn', text: `<${site?.url}|${site?.url}>` }] },
   ]
@@ -44,7 +44,7 @@ export async function checkAndAlert() {
       await sendAlert(
         site.id,
         'downtime',
-        `El sitio dejó de responder. Último check: ${current.responseTime ?? '?'}ms`,
+        `The site stopped responding. Last check: ${current.responseTime ?? '?'}ms`,
         'critical'
       )
     }
@@ -53,7 +53,7 @@ export async function checkAndAlert() {
       await sendAlert(
         site.id,
         'recovery',
-        `El sitio volvió a responder. Estado: ${current.status}, ${current.responseTime}ms`,
+        `The site is responding again. Status: ${current.status}, ${current.responseTime}ms`,
         'info'
       )
     }
@@ -76,7 +76,7 @@ export async function checkAndAlert() {
       await sendAlert(
         ssl.siteId,
         'ssl_expiry',
-        `El certificado SSL expira en ${ssl.daysRemaining} días (${ssl.expiresAt}).`,
+        `The SSL certificate expires in ${ssl.daysRemaining} days (${ssl.expiresAt}).`,
         ssl.daysRemaining! <= 3 ? 'critical' : 'warning'
       )
     }

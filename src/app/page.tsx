@@ -17,11 +17,11 @@ export default async function Home() {
           <div className="flex gap-3 items-center">
             <Link href="/alerts" className="text-xs relative">
               {alerts > 0
-                ? <span className="text-red-400 font-bold">🔔 {alerts} alerts</span>
+                ? <span className="text-red-400 font-bold"><span aria-hidden="true">🔔</span> {alerts} {alerts === 1 ? 'alert' : 'alerts'}</span>
                 : <span className="text-zinc-400 hover:text-zinc-200">Alerts</span>}
             </Link>
             <Link href="/reports" className="text-xs text-zinc-400 hover:text-zinc-200">Reports</Link>
-            <a href="/api/report-preview/general" target="_blank" className="text-xs text-zinc-400 hover:text-zinc-200">General PDF</a>
+            <a href="/api/report-preview/general" target="_blank" rel="noopener noreferrer" className="text-xs text-zinc-400 hover:text-zinc-200">General PDF</a>
             <Link href="/settings" className="text-xs text-zinc-400 hover:text-zinc-200">Settings</Link>
             <RefreshButton />
             <AddSiteForm />
@@ -31,7 +31,7 @@ export default async function Home() {
 
       <main className="max-w-6xl mx-auto p-6">
         {sites.length === 0 ? (
-          <p className="text-zinc-500 text-center py-20">No sites yet</p>
+          <p className="text-zinc-400 text-center py-20">No sites yet</p>
         ) : (
           <div className="grid gap-4">
             {sites.map(site => <SiteCard key={site.id} site={site} />)}
@@ -56,7 +56,7 @@ function SiteCard({ site }: { site: SiteSummaryData }) {
           <span className="text-sm text-zinc-400">{site.url}</span>
         </div>
         <div className="flex gap-2 items-center">
-          {s && <span title={`SSL: ${s.daysRemaining ?? '?'} days`} className={`w-2 h-2 rounded-full ${s.valid ? 'bg-green-500' : 'bg-red-500'}`} />}
+          {s && <span role="img" aria-label={`SSL: ${s.valid ? 'valid' : 'invalid'}, ${s.daysRemaining ?? '?'} days left`} title={`SSL: ${s.daysRemaining ?? '?'} days`} className={`w-2 h-2 rounded-full ${s.valid ? 'bg-green-500' : 'bg-red-500'}`} />}
           <span className={`px-2 py-0.5 rounded text-xs font-medium ${
             h?.status === 'healthy' ? 'bg-green-900 text-green-300'
             : h?.status === 'warning' ? 'bg-yellow-900 text-yellow-300'
@@ -81,7 +81,7 @@ function SiteCard({ site }: { site: SiteSummaryData }) {
 function Metric({ label, value }: { label: string; value: string }) {
   return (
     <div>
-      <p className="text-zinc-500 text-xs">{label}</p>
+      <p className="text-zinc-400 text-xs">{label}</p>
       <p className="font-medium">{value}</p>
     </div>
   )

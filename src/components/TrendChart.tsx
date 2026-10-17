@@ -10,7 +10,7 @@ export function TrendChart<T extends { checkedAt: string | Date }>({ title, data
     return (
       <div className="bg-zinc-800 rounded-lg p-5 border border-zinc-700">
         <h3 className="font-semibold mb-2">{title}</h3>
-        <p className="text-sm text-zinc-500">At least 2 data points are needed to plot</p>
+        <p className="text-sm text-zinc-400">At least 2 data points are needed to plot</p>
       </div>
     )
   }
@@ -36,7 +36,7 @@ export function TrendChart<T extends { checkedAt: string | Date }>({ title, data
           </div>
         ))}
       </div>
-      <div className="flex justify-between mt-1 text-xs text-zinc-500">
+      <div className="flex justify-between mt-1 text-xs text-zinc-400">
         <span>{values[0]?.date}</span>
         <span>{values[values.length - 1]?.date}</span>
       </div>

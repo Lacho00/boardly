@@ -1,8 +1,9 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { readJson, writeOk } from '@/lib/api-client'
+import { readJson, writeError } from '@/lib/api-client'
 import Link from 'next/link'
+import { ActionMessage } from '@/components/ActionMessage'
 
 type Report = {
   id: string
@@ -20,6 +21,7 @@ type Report = {
 export default function ReportsPage() {
   const [reports, setReports] = useState<Report[]>([])
   const [generating, setGenerating] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   async function fetchReports() {
     const data = await fetch('/api/reports').then(r => readJson<Report[]>(r)).catch(() => null)
@@ -34,7 +36,9 @@ export default function ReportsPage() {
     setGenerating(true)
     try {
       const res = await fetch('/api/reports', { method: 'POST' })
-      if (await writeOk(res)) setReports(await fetchReports())
+      const message = await writeError(res)
+      setError(message)
+      if (!message) setReports(await fetchReports())
     } finally {
       setGenerating(false)
     }
@@ -52,21 +56,22 @@ export default function ReportsPage() {
       <header className="border-b border-zinc-700 px-6 py-4">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <Link href="/" className="text-blue-400 hover:underline text-sm">← Dashboard</Link>
-            <h1 className="text-xl font-bold">Reportes Mensuales</h1>
+            <Link href="/" className="text-blue-400 hover:underline text-sm"><span aria-hidden="true">←</span> Dashboard</Link>
+            <h1 className="text-xl font-bold">Monthly Reports</h1>
           </div>
           <div className="flex gap-2">
-            <a href="/api/report-preview/general" target="_blank" className="bg-zinc-700 hover:bg-zinc-600 px-3 py-2 rounded text-sm">PDF General</a>
+            <a href="/api/report-preview/general" target="_blank" rel="noopener noreferrer" className="bg-zinc-700 hover:bg-zinc-600 px-3 py-2 rounded text-sm">General PDF</a>
             <button onClick={generate} disabled={generating} className="bg-blue-700 hover:bg-blue-600 px-4 py-2 rounded text-sm disabled:opacity-50">
-              {generating ? 'Generando...' : 'Generar reporte mensual'}
+              {generating ? 'Generating...' : 'Generate monthly report'}
             </button>
           </div>
         </div>
       </header>
 
       <main className="max-w-6xl mx-auto p-6">
+        <ActionMessage state={error ? { ok: false, message: error } : null} className="block mb-4 text-sm" />
         {Object.entries(grouped).length === 0 ? (
-          <p className="text-zinc-500 text-center py-20">No hay reportes todavía</p>
+          <p className="text-zinc-400 text-center py-20">No reports yet</p>
         ) : (
           Object.entries(grouped).sort().reverse().map(([period, items]) => (
             <div key={period} className="mb-8">
@@ -79,9 +84,9 @@ export default function ReportsPage() {
                       <p className="text-xs text-zinc-400">{r.site.url}</p>
                     </div>
                     <div className="flex gap-3 items-center">
-                      <MetricBadge label="Rendimiento" value={r.avgPerformance} />
+                      <MetricBadge label="Performance" value={r.avgPerformance} />
                       <MetricBadge label="SEO" value={r.avgSeo} />
-                      <MetricBadge label="Accesibilidad" value={r.avgAccessibility} />
+                      <MetricBadge label="Accessibility" value={r.avgAccessibility} />
                       <MetricBadge label="Uptime" value={r.uptime} isUptime />
                       <a
                         href={`/api/report-preview/${r.siteId}`}
@@ -106,8 +111,8 @@ function MetricBadge({ label, value, isUptime }: { label: string; value: number 
   if (value == null) {
     return (
       <div className="flex flex-col items-center min-w-[60px]">
-        <span className="text-xs text-zinc-500">—</span>
-        <span className="text-[10px] text-zinc-600 mt-0.5">{label}</span>
+        <span className="text-xs text-zinc-400">—</span>
+        <span className="text-xs text-zinc-400 mt-0.5">{label}</span>
       </div>
     )
   }
@@ -119,7 +124,7 @@ function MetricBadge({ label, value, isUptime }: { label: string; value: number 
   return (
     <div className="flex flex-col items-center min-w-[60px] bg-zinc-750 rounded-lg px-3 py-1.5 border border-zinc-700">
       <span className={`text-sm font-bold ${color}`}>{value.toFixed(isUptime ? 1 : 0)}%</span>
-      <span className="text-[10px] text-zinc-500 mt-0.5">{label}</span>
+      <span className="text-xs text-zinc-400 mt-0.5">{label}</span>
     </div>
   )
 }
