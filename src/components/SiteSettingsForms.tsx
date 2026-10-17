@@ -43,6 +43,9 @@ export function WpPasswordForm({ siteId, currentPassword }: { siteId: string; cu
       <input
         type="password"
         name="wpAppPassword"
+        aria-label="WordPress application password"
+        autoComplete="off"
+        spellCheck={false}
         placeholder={currentPassword ? '•••••••• (leave empty to clear)' : 'user:app_password'}
         className="bg-zinc-700 border border-zinc-600 rounded px-3 py-1.5 text-sm flex-1"
       />
