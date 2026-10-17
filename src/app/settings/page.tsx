@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { readJson, writeOk } from '@/lib/api-client'
 
 export default function SettingsPage() {
   const [webhook, setWebhook] = useState('')
@@ -9,16 +10,17 @@ export default function SettingsPage() {
   const router = useRouter()
 
   useEffect(() => {
-    fetch('/api/config').then(r => r.json()).then(d => setWebhook(d.slackWebhook ?? ''))
+    fetch('/api/config').then(r => readJson<{ slackWebhook?: string }>(r)).then(d => setWebhook(d?.slackWebhook ?? ''))
   }, [])
 
   async function save(e: React.FormEvent) {
     e.preventDefault()
-    await fetch('/api/config', {
+    const res = await fetch('/api/config', {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ slackWebhook: webhook }),
     })
+    if (!(await writeOk(res))) return
     setSaved(true)
     setTimeout(() => setSaved(false), 2000)
   }

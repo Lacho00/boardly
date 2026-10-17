@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState, use } from 'react'
+import { readJson, writeOk } from '@/lib/api-client'
 
 type Snapshot = { score: number | null; bestPractices: number | null; lcp: number | null; cls: number | null; ttfb: number | null; checkedAt: string }
 type Health = { status: string; responseTime: number | null; wpVersion: string | null; plugins: number | null; checkedAt: string }
@@ -20,14 +21,19 @@ type SiteDetail = {
 export default function SitePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params)
   const [site, setSite] = useState<SiteDetail | null>(null)
+  const [notFound, setNotFound] = useState(false)
   const [deleting, setDeleting] = useState(false)
   const [collecting, setCollecting] = useState(false)
   const [collectMsg, setCollectMsg] = useState<string | null>(null)
 
   useEffect(() => {
-    fetch(`/api/sites/${id}`).then(r => r.json()).then(setSite)
+    fetch(`/api/sites/${id}`)
+      .then(r => readJson<SiteDetail>(r))
+      .then(d => (d ? setSite(d) : setNotFound(true)))
+      .catch(() => setNotFound(true))
   }, [id])
 
+  if (notFound) return <div className="min-h-screen bg-zinc-900 text-zinc-100 p-6">Sitio no encontrado</div>
   if (!site) return <div className="min-h-screen bg-zinc-900 text-zinc-100 p-6">Cargando...</div>
 
   const h = site.healthChecks?.[0]
@@ -39,18 +45,24 @@ export default function SitePage({ params }: { params: Promise<{ id: string }> }
   async function handleCollect() {
     setCollecting(true)
     setCollectMsg(null)
-    await fetch('/api/collect', { method: 'POST', body: JSON.stringify({ siteId: id }), headers: { 'Content-Type': 'application/json' } })
-    const data = await fetch(`/api/sites/${id}`).then(r => r.json())
-    setSite(data)
-    setCollecting(false)
-    setCollectMsg('Datos recolectados correctamente')
-    setTimeout(() => setCollectMsg(null), 4000)
+    try {
+      const res = await fetch('/api/collect', { method: 'POST', body: JSON.stringify({ siteId: id }), headers: { 'Content-Type': 'application/json' } })
+      if (await writeOk(res)) {
+        const data = await fetch(`/api/sites/${id}`).then(r => readJson<SiteDetail>(r))
+        if (data) setSite(data)
+        setCollectMsg('Datos recolectados correctamente')
+        setTimeout(() => setCollectMsg(null), 4000)
+      }
+    } finally {
+      setCollecting(false)
+    }
   }
 
   async function handleDelete() {
     if (!confirm('¿Eliminar este sitio y todos sus datos?')) return
     setDeleting(true)
-    await fetch(`/api/sites/${id}`, { method: 'DELETE' })
+    const res = await fetch(`/api/sites/${id}`, { method: 'DELETE' })
+    if (!(await writeOk(res))) { setDeleting(false); return }
     window.location.href = '/'
   }
 
@@ -142,11 +154,12 @@ function LocalLighthouseToggle({ siteId, enabled }: { siteId: string; enabled: b
 
   async function toggle() {
     const next = !on
-    await fetch(`/api/sites/${siteId}`, {
+    const res = await fetch(`/api/sites/${siteId}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ useLocalLighthouse: next }),
     })
+    if (!(await writeOk(res))) return
     setOn(next)
     setSaved(true)
     setTimeout(() => setSaved(false), 3000)
@@ -177,11 +190,12 @@ function WpPasswordForm({ siteId, currentPassword }: { siteId: string; currentPa
 
   async function savePassword(e: React.FormEvent) {
     e.preventDefault()
-    await fetch(`/api/sites/${siteId}`, {
+    const res = await fetch(`/api/sites/${siteId}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ wpAppPassword: password || null }),
     })
+    if (!(await writeOk(res))) return
     setSaved(true)
     setTimeout(() => setSaved(false), 3000)
   }
