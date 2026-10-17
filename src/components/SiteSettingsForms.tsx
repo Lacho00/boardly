@@ -13,7 +13,7 @@ export function LocalLighthouseToggle({ siteId, enabled }: { siteId: string; ena
     <div className="flex items-center justify-between">
       <div>
         <p className="text-sm font-medium">Use local Lighthouse</p>
-        <p className="text-xs text-zinc-400">Runs Lighthouse with a local Chromium. Useful for localhost or internal networks. Slower (~30s per site) but needs no internet.</p>
+        <p className="text-xs text-dim">Runs Lighthouse with a local Chromium. Useful for localhost or internal networks. Slower (~30s per site) but needs no internet.</p>
       </div>
       <form
         action={fd => { setOn(!on); return formAction(fd) }}
@@ -26,9 +26,9 @@ export function LocalLighthouseToggle({ siteId, enabled }: { siteId: string; ena
           role="switch"
           aria-checked={on}
           aria-label="Use local Lighthouse"
-          className={`relative w-12 h-6 rounded-full transition-colors ${on ? 'bg-blue-600' : 'bg-zinc-600'}`}
+          className={`relative w-12 h-6 rounded-full transition-colors ${on ? 'bg-ok' : 'bg-line'}`}
         >
-          <span className={`absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white transition-transform ${on ? 'translate-x-6' : ''}`} />
+          <span className={`absolute top-0.5 left-0.5 w-5 h-5 rounded-full transition-transform ${on ? 'bg-bg' : 'bg-ink'} ${on ? 'translate-x-6' : ''}`} />
         </button>
       </form>
     </div>
@@ -47,9 +47,9 @@ export function WpPasswordForm({ siteId, currentPassword }: { siteId: string; cu
         autoComplete="off"
         spellCheck={false}
         placeholder={currentPassword ? '•••••••• (leave empty to clear)' : 'user:app_password'}
-        className="bg-zinc-700 border border-zinc-600 rounded px-3 py-1.5 text-sm flex-1"
+        className="bg-bg border border-line rounded-[3px] px-3 py-1.5 text-sm text-ink placeholder:text-dim focus:border-ok flex-1 min-w-0"
       />
-      <SubmitButton pendingLabel="Saving…" className="bg-blue-700 hover:bg-blue-600 px-3 py-1.5 rounded text-sm">Save</SubmitButton>
+      <SubmitButton pendingLabel="Saving…" className="rounded-[3px] border border-ok text-ok hover:bg-ok/10 px-3 py-1.5 text-sm">Save</SubmitButton>
       <ActionMessage state={state} />
     </form>
   )

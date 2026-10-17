@@ -81,7 +81,7 @@ export function AlertsView({ header }: { header: ReactNode }) {
                         New
                       </span>
                     )}
-                    <p className="min-w-0 text-sm">{a.message}</p>
+                    <p className="min-w-0 break-words text-sm">{a.message}</p>
                   </div>
                 </div>
               )
