@@ -40,3 +40,7 @@ type SiteDetailRow = Prisma.SiteGetPayload<{ include: typeof siteDetailInclude }
 export type SiteSummary = Jsonify<WithoutSecret<SiteListRow>>
 export type SiteDetail = Jsonify<WithoutSecret<SiteDetailRow>>
 export type Snapshot = SiteDetail['performanceSnapshots'][number]
+
+/** Same shapes with Date kept: what server components read straight from Prisma. */
+export type SiteSummaryData = WithoutSecret<SiteListRow>
+export type SiteDetailData = WithoutSecret<SiteDetailRow>

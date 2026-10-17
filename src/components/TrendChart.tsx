@@ -1,16 +1,16 @@
-export function TrendChart<T extends { checkedAt: string }>({ title, data, map, color }: {
+export function TrendChart<T extends { checkedAt: string | Date }>({ title, data, map, color }: {
   title: string
   data: T[]
   map: (d: T) => number | null
   color: string
 }) {
-  const values = data.map(d => ({ date: new Date(d.checkedAt).toLocaleDateString(), value: map(d) })).filter(v => v.value != null)
+  const values = data.map(d => ({ date: new Date(d.checkedAt).toLocaleDateString('en-US'), value: map(d) })).filter(v => v.value != null)
 
   if (values.length < 2) {
     return (
       <div className="bg-zinc-800 rounded-lg p-5 border border-zinc-700">
         <h3 className="font-semibold mb-2">{title}</h3>
-        <p className="text-sm text-zinc-500">Se necesitan al menos 2 puntos para graficar</p>
+        <p className="text-sm text-zinc-500">At least 2 data points are needed to plot</p>
       </div>
     )
   }
