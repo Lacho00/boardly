@@ -1,0 +1,1 @@
+Boardly dashboard: uptime, performance, SSL and SEO scores for four monitored sites
