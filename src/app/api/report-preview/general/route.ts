@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { escapeHtml } from '@/lib/security'
 
 const scoreCls = (s?: number | null) => {
   if (s == null) return 'score-poor'
@@ -48,8 +49,8 @@ export async function GET() {
 
     return `      <tr>
         <td>
-          <p class="site-name">${site.name}</p>
-          <p class="site-url">${site.url}</p>
+          <p class="site-name">${escapeHtml(site.name)}</p>
+          <p class="site-url">${escapeHtml(site.url)}</p>
         </td>
         <td class="text-center"><span class="badge ${badgeCls(h?.status)}">${h?.status ?? 'N/A'}</span></td>
         <td class="text-center score-indicator ${scoreCls(p?.score)}">${p?.score ?? '—'}</td>

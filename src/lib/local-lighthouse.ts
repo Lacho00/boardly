@@ -1,4 +1,7 @@
-import { execSync } from 'child_process'
+import { execFile } from 'child_process'
+import { promisify } from 'util'
+
+const execFileAsync = promisify(execFile)
 
 export interface LocalLighthouseResult {
   performance: number | null
@@ -14,8 +17,16 @@ export async function runLocalLighthouse(url: string): Promise<LocalLighthouseRe
   try {
     const lighthouseBin = `${process.cwd()}/node_modules/.bin/lighthouse`
 
-    const out = execSync(
-      `"${lighthouseBin}" "${url}" --chrome-flags="--headless --no-sandbox --disable-gpu" --output=json --quiet --only-categories=performance,accessibility,seo,best-practices 2>/dev/null`,
+    // execFile with an argument array: the URL never reaches a shell.
+    const { stdout: out } = await execFileAsync(
+      lighthouseBin,
+      [
+        url,
+        '--chrome-flags=--headless --no-sandbox --disable-gpu',
+        '--output=json',
+        '--quiet',
+        '--only-categories=performance,accessibility,seo,best-practices',
+      ],
       { encoding: 'utf-8', timeout: 120000, maxBuffer: 10 * 1024 * 1024, env: { ...process.env, CHROME_PATH: '/usr/bin/chromium' } }
     )
 

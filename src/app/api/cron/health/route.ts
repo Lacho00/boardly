@@ -1,4 +1,5 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
+import { rejectUnauthorizedCron } from '@/lib/security'
 import { prisma } from '@/lib/prisma'
 import { checkWordPressHealth } from '@/lib/health-check'
 import { checkSsl } from '@/lib/ssl-check'
@@ -6,7 +7,9 @@ import { checkAndAlert } from '@/lib/notifier'
 
 export const maxDuration = 60
 
-export async function GET() {
+export async function GET(req: NextRequest) {
+  const denied = rejectUnauthorizedCron(req)
+  if (denied) return denied
   const sites = await prisma.site.findMany({ where: { active: true } })
 
   const results = await Promise.allSettled(

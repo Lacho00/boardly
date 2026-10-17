@@ -10,7 +10,7 @@ type A11y = { score: number | null; issues: number | null }
 type Ssl = { valid: boolean; daysRemaining: number | null; issuer: string | null; expiresAt: string | null }
 
 type SiteDetail = {
-  id: string; name: string; url: string; type: string; active: boolean; wpAppPassword: string | null; useLocalLighthouse: boolean
+  id: string; name: string; url: string; type: string; active: boolean; hasWpAppPassword: boolean; useLocalLighthouse: boolean
   healthChecks: Health[]
   performanceSnapshots: Snapshot[]
   seoAudits: Seo[]
@@ -126,7 +126,7 @@ export default function SitePage({ params }: { params: Promise<{ id: string }> }
             <p className="text-xs text-zinc-400 mb-2">
               Application Password de WordPress para acceder a la API REST. Si el sitio tiene Cloudflare, esto permite obtener el SEO real.
             </p>
-            <WpPasswordForm siteId={site.id} currentPassword={site.wpAppPassword} />
+            <WpPasswordForm siteId={site.id} currentPassword={site.hasWpAppPassword} />
           </div>
           <div className="border-t border-zinc-700 pt-4">
             <h3 className="font-semibold mb-2">Origen de datos</h3>
@@ -184,7 +184,7 @@ function LocalLighthouseToggle({ siteId, enabled }: { siteId: string; enabled: b
   )
 }
 
-function WpPasswordForm({ siteId, currentPassword }: { siteId: string; currentPassword: string | null }) {
+function WpPasswordForm({ siteId, currentPassword }: { siteId: string; currentPassword: boolean }) {
   const [password, setPassword] = useState('')
   const [saved, setSaved] = useState(false)
 
