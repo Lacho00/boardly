@@ -2,23 +2,34 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { StatCard } from '@/components/StatCard'
 import { TrendChart } from '@/components/TrendChart'
+import { LineChart } from '@/components/LineChart'
+import { RangeSelector } from '@/components/RangeSelector'
 import { SiteActions } from '@/components/SiteActions'
 import { LocalLighthouseToggle, WpPasswordForm } from '@/components/SiteSettingsForms'
-import { getSite } from '@/lib/queries'
+import { getSite, getSnapshotHistory } from '@/lib/queries'
+import { parseRange } from '@/lib/range'
+import { WEB_VITALS, type ChartSeries } from '@/lib/chart'
 
 export const dynamic = 'force-dynamic'
 
-export default async function SitePage({ params }: { params: Promise<{ id: string }> }) {
+export default async function SitePage({ params, searchParams }: {
+  params: Promise<{ id: string }>
+  searchParams: Promise<{ range?: string | string[] }>
+}) {
   const { id } = await params
-  const site = await getSite(id)
+  const range = parseRange((await searchParams).range)
+  const [site, history] = await Promise.all([getSite(id), getSnapshotHistory(id, range)])
   if (!site) notFound()
+
+  const vital = (key: string, label: string, color: string, pick: (d: (typeof history)[number]) => number | null): ChartSeries => ({
+    key, label, color, points: history.map(d => ({ t: d.checkedAt.getTime(), v: pick(d) })),
+  })
 
   const h = site.healthChecks[0]
   const p = site.performanceSnapshots[0]
   const a = site.accessibilityScores[0]
   const seo = site.seoAudits[0]
   const s = site.sslChecks[0]
-  const history = site.performanceSnapshots.toReversed()
 
   return (
     <div className="min-h-screen bg-zinc-900 text-zinc-100">
@@ -46,20 +57,18 @@ export default async function SitePage({ params }: { params: Promise<{ id: strin
           <StatCard label="SSL" value={s?.valid ? `${s.daysRemaining ?? '?'} days` : 'Invalid'} sub={s?.issuer ?? ''} />
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <TrendChart
-            title="Performance Score"
-            data={history}
-            map={d => d.score}
-            color="blue"
-          />
-          <TrendChart
-            title="LCP (seconds)"
-            data={history}
-            map={d => d.lcp}
-            color="emerald"
-          />
-        </div>
+        <section aria-labelledby="trends-heading" className="grid gap-4">
+          <div className="flex items-center justify-between">
+            <h2 id="trends-heading" className="font-semibold">Trends</h2>
+            <RangeSelector current={range} />
+          </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <TrendChart title="Performance Score" data={history} map={d => d.score} color="blue" />
+            <LineChart title="LCP" unit="s" series={[vital('lcp', 'LCP', '#60a5fa', d => d.lcp)]} thresholds={WEB_VITALS.lcp} />
+            <LineChart title="CLS" decimals={3} series={[vital('cls', 'CLS', '#a78bfa', d => d.cls)]} thresholds={WEB_VITALS.cls} />
+            <LineChart title="TTFB" unit="s" series={[vital('ttfb', 'TTFB', '#fbbf24', d => d.ttfb)]} thresholds={WEB_VITALS.ttfb} />
+          </div>
+        </section>
 
         {seo?.title && (
           <div className="bg-zinc-800 rounded-lg p-5 border border-zinc-700">
