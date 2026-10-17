@@ -23,8 +23,8 @@ export function LocalLighthouseToggle({ siteId, enabled }: { siteId: string; ena
   return (
     <div className="flex items-center justify-between">
       <div>
-        <p className="text-sm font-medium">Usar Lighthouse local</p>
-        <p className="text-xs text-zinc-400">Ejecuta Lighthouse con Chromium local. Útil para sitios en localhost o redes internas. Más lento (~30s por sitio) pero no requiere internet.</p>
+        <p className="text-sm font-medium">Use local Lighthouse</p>
+        <p className="text-xs text-zinc-400">Runs Lighthouse with a local Chromium. Useful for localhost or internal networks. Slower (~30s per site) but needs no internet.</p>
       </div>
       <div className="flex items-center gap-2">
         {saved && <span className="text-green-400 text-xs">✓</span>}
@@ -61,10 +61,10 @@ export function WpPasswordForm({ siteId, currentPassword }: { siteId: string; cu
         type="password"
         value={password}
         onChange={e => setPassword(e.target.value)}
-        placeholder={currentPassword ? '•••••••• (dejar vacío para borrar)' : 'usuario:app_password'}
+        placeholder={currentPassword ? '•••••••• (leave empty to clear)' : 'user:app_password'}
         className="bg-zinc-700 border border-zinc-600 rounded px-3 py-1.5 text-sm flex-1"
       />
-      <button type="submit" className="bg-blue-700 hover:bg-blue-600 px-3 py-1.5 rounded text-sm">Guardar</button>
+      <button type="submit" className="bg-blue-700 hover:bg-blue-600 px-3 py-1.5 rounded text-sm">Save</button>
       {saved && <span className="text-green-400 text-sm">✓</span>}
     </form>
   )
