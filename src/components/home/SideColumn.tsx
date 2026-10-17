@@ -26,11 +26,16 @@ function alertSeverity(s: string): Severity {
   return s === 'critical' ? 'critical' : s === 'warning' ? 'warning' : 'healthy'
 }
 
-function time(d: Date): string {
-  return d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })
+/** Time for today's alerts, date for older ones; UTC so server and client agree. */
+function time(d: Date, now: Date): string {
+  const opts = { timeZone: 'UTC' } as const
+  if (d.toLocaleDateString('en-GB', opts) === now.toLocaleDateString('en-GB', opts)) {
+    return d.toLocaleTimeString('en-GB', { ...opts, hour: '2-digit', minute: '2-digit' })
+  }
+  return d.toLocaleDateString('en-GB', { ...opts, day: 'numeric', month: 'short' })
 }
 
-export default function SideColumn({ alerts, sites }: { alerts: Alert[]; sites: HomeSite[] }) {
+export default function SideColumn({ alerts, sites, now = new Date() }: { alerts: Alert[]; sites: HomeSite[]; now?: Date }) {
   const ssl = sites
     .flatMap(s => (s.sslChecks[0]?.daysRemaining == null ? [] : [{ id: s.id, url: s.url, days: s.sslChecks[0].daysRemaining as number }]))
     .sort((a, b) => a.days - b.days)
@@ -49,7 +54,7 @@ export default function SideColumn({ alerts, sites }: { alerts: Alert[]; sites: 
         ) : (
           alerts.map(a => (
             <p key={a.id} className="border-b border-dashed border-line py-1.5 text-[11px] leading-snug text-dim last:border-0">
-              <span className="mr-1.5 text-dim">{time(a.createdAt)}</span>
+              <span className="mr-1.5 text-dim">{time(a.createdAt, now)}</span>
               <em className={`not-italic ${severityClass[alertSeverity(a.severity)].text}`}>{a.siteName}</em>{' '}
               {a.message}
             </p>

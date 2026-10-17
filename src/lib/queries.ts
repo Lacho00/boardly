@@ -1,4 +1,5 @@
 import 'server-only'
+import { isDemo } from '@/lib/demo'
 import { prisma } from '@/lib/prisma'
 import { toPublicSite } from '@/lib/site-public'
 import { severityRank, siteSeverity } from '@/lib/severity'
@@ -31,6 +32,16 @@ export async function getSnapshotHistory(siteId: string, days: number) {
 }
 
 /** Sites with their last 24 h of checks (oldest first), 30-day uptime and severity; worst first, then by name. */
+/**
+ * The clock the home windows are measured against. The public demo is seeded once at
+ * build time, so it anchors to its newest check; otherwise the 24 h strip empties a day later.
+ */
+export async function getDataNow(): Promise<Date> {
+  if (!isDemo) return new Date()
+  const latest = await prisma.healthCheck.findFirst({ orderBy: { checkedAt: 'desc' }, select: { checkedAt: true } })
+  return latest?.checkedAt ?? new Date()
+}
+
 export async function getHomeSites(now = new Date()): Promise<HomeSite[]> {
   const since24h = new Date(now.getTime() - 24 * 60 * 60 * 1000)
   const since30d = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000)

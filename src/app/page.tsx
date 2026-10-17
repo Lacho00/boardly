@@ -5,12 +5,12 @@ import SideColumn from '@/components/home/SideColumn'
 import SiteList from '@/components/home/SiteList'
 import SummaryStrip from '@/components/home/SummaryStrip'
 import { summarizeHome } from '@/lib/home-summary'
-import { getHomeSites, getRecentAlerts } from '@/lib/queries'
+import { getDataNow, getHomeSites, getRecentAlerts } from '@/lib/queries'
 
 export const dynamic = 'force-dynamic'
 
 export default async function Home() {
-  const now = new Date()
+  const now = await getDataNow()
   const [sites, alerts] = await Promise.all([getHomeSites(now), getRecentAlerts()])
   const summary = summarizeHome(sites)
   const { counts } = summary
@@ -46,7 +46,7 @@ export default async function Home() {
               <SummaryStrip summary={summary} />
               <SiteList sites={sites} now={now} />
             </div>
-            <SideColumn alerts={alerts} sites={sites} />
+            <SideColumn alerts={alerts} sites={sites} now={now} />
           </div>
         )}
       </main>

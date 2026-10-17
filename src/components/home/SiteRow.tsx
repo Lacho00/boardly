@@ -71,7 +71,7 @@ export default function SiteRow({ site, now }: { site: HomeSite; now: Date }) {
         </div>
         <div className="hidden sm:block"><UptimeStrip slots={slots} /></div>
         <div aria-hidden="true" className="sm:hidden [&_[role=img]]:pointer-events-none">
-          <UptimeStrip slots={slots.slice(-16)} />
+          <UptimeStrip slots={bucketChecks(site.recent, now, 16)} />
         </div>
       </div>
 
