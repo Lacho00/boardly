@@ -31,7 +31,7 @@ export default function AlertsPage() {
     <div className="min-h-screen bg-zinc-900 text-zinc-100">
       <header className="border-b border-zinc-700 px-6 py-4">
         <div className="max-w-4xl mx-auto flex items-center gap-4">
-          <Link href="/" className="text-blue-400 hover:underline text-sm">← Dashboard</Link>
+          <Link href="/" className="text-blue-400 hover:underline text-sm"><span aria-hidden="true">←</span> Dashboard</Link>
           <h1 className="text-xl font-bold">Alerts</h1>
           {alerts.filter(a => a.severity === 'critical').length > 0 && (
             <span className="bg-red-900 text-red-300 px-2 py-0.5 rounded text-xs font-medium">
@@ -43,7 +43,7 @@ export default function AlertsPage() {
 
       <main className="max-w-4xl mx-auto p-6">
         {alerts.length === 0 ? (
-          <p className="text-zinc-500 text-center py-20">No alerts recorded</p>
+          <p className="text-zinc-400 text-center py-20">No alerts recorded</p>
         ) : (
           <div className="space-y-2">
             {alerts.map(a => (

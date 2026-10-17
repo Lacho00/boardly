@@ -52,11 +52,11 @@ export default function ReportsPage() {
       <header className="border-b border-zinc-700 px-6 py-4">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <Link href="/" className="text-blue-400 hover:underline text-sm">← Dashboard</Link>
+            <Link href="/" className="text-blue-400 hover:underline text-sm"><span aria-hidden="true">←</span> Dashboard</Link>
             <h1 className="text-xl font-bold">Monthly Reports</h1>
           </div>
           <div className="flex gap-2">
-            <a href="/api/report-preview/general" target="_blank" className="bg-zinc-700 hover:bg-zinc-600 px-3 py-2 rounded text-sm">General PDF</a>
+            <a href="/api/report-preview/general" target="_blank" rel="noopener noreferrer" className="bg-zinc-700 hover:bg-zinc-600 px-3 py-2 rounded text-sm">General PDF</a>
             <button onClick={generate} disabled={generating} className="bg-blue-700 hover:bg-blue-600 px-4 py-2 rounded text-sm disabled:opacity-50">
               {generating ? 'Generating...' : 'Generate monthly report'}
             </button>
@@ -66,7 +66,7 @@ export default function ReportsPage() {
 
       <main className="max-w-6xl mx-auto p-6">
         {Object.entries(grouped).length === 0 ? (
-          <p className="text-zinc-500 text-center py-20">No reports yet</p>
+          <p className="text-zinc-400 text-center py-20">No reports yet</p>
         ) : (
           Object.entries(grouped).sort().reverse().map(([period, items]) => (
             <div key={period} className="mb-8">
@@ -106,8 +106,8 @@ function MetricBadge({ label, value, isUptime }: { label: string; value: number 
   if (value == null) {
     return (
       <div className="flex flex-col items-center min-w-[60px]">
-        <span className="text-xs text-zinc-500">—</span>
-        <span className="text-[10px] text-zinc-600 mt-0.5">{label}</span>
+        <span className="text-xs text-zinc-400">—</span>
+        <span className="text-xs text-zinc-400 mt-0.5">{label}</span>
       </div>
     )
   }
@@ -119,7 +119,7 @@ function MetricBadge({ label, value, isUptime }: { label: string; value: number 
   return (
     <div className="flex flex-col items-center min-w-[60px] bg-zinc-750 rounded-lg px-3 py-1.5 border border-zinc-700">
       <span className={`text-sm font-bold ${color}`}>{value.toFixed(isUptime ? 1 : 0)}%</span>
-      <span className="text-[10px] text-zinc-500 mt-0.5">{label}</span>
+      <span className="text-xs text-zinc-400 mt-0.5">{label}</span>
     </div>
   )
 }
