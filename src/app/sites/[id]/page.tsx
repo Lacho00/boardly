@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
+import { AppHeader } from '@/components/AppHeader'
 import { StatCard } from '@/components/StatCard'
 import { TrendChart } from '@/components/TrendChart'
 import { LineChart } from '@/components/LineChart'
@@ -34,7 +35,8 @@ export default async function SitePage({ params, searchParams }: {
 
   return (
     <div className="min-h-screen bg-zinc-900 text-zinc-100">
-      <header className="border-b border-zinc-700 px-6 py-4">
+      <AppHeader active="sites" />
+      <div className="border-b border-zinc-700 px-6 py-3">
         <div className="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-x-4 gap-y-3">
           <div className="flex items-center gap-4 min-w-0">
             <Link href="/" className="text-blue-400 hover:underline text-sm py-2"><span aria-hidden="true">←</span> Back</Link>
@@ -44,7 +46,7 @@ export default async function SitePage({ params, searchParams }: {
             <SiteActions siteId={site.id} />
           </div>
         </div>
-      </header>
+      </div>
 
       <main className="max-w-6xl mx-auto p-6 grid gap-6">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
