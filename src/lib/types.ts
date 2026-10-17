@@ -44,3 +44,10 @@ export type Snapshot = SiteDetail['performanceSnapshots'][number]
 /** Same shapes with Date kept: what server components read straight from Prisma. */
 export type SiteSummaryData = WithoutSecret<SiteListRow>
 export type SiteDetailData = WithoutSecret<SiteDetailRow>
+
+/** Result of a Server Action, read by `useActionState`. `fields` echoes input so a failed submit keeps what was typed. */
+export type ActionState = {
+  ok: boolean
+  message: string
+  fields?: Record<string, string>
+} | null
