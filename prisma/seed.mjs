@@ -1,14 +1,22 @@
-// Fills the database with fictional sites and 30 days of fake metrics.
+// Fills the database with fictional sites and 30 days of fake metrics
+// (daily until yesterday, then half-hourly checks for the last 24 h)..
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 const DAY = 86_400_000;
+const HALF_HOUR = 1_800_000;
+
+// Half-hour slots (0 = now) that are not healthy in the last 24 h, keyed by site index.
+const incidents = {
+  1: { warning: [18, 5] },
+  2: { error: [31, 30, 12], warning: [22, 0] },
+};
 
 const sites = [
   { name: "Acme Shop", url: "https://shop.acme.test", base: 88, seo: 92, a11y: 95, ssl: 62 },
-  { name: "Northwind Blog", url: "https://blog.northwind.test", base: 94, seo: 97, a11y: 98, ssl: 74 },
-  { name: "Globex Portal", url: "https://portal.globex.test", base: 71, seo: 80, a11y: 84, ssl: 9 },
-  { name: "Initech Docs", url: "https://docs.initech.test", base: 82, seo: 88, a11y: 90, ssl: 41 },
+  { name: "Northwind Blog", url: "https://blog.northwind.test", base: 94, seo: 97, a11y: 98, ssl: 14 },
+  { name: "Globex Portal", url: "https://portal.globex.test", base: 71, seo: 80, a11y: 84, ssl: 5 },
+  { name: "Initech Docs", url: "https://docs.initech.test", base: 82, seo: 88, a11y: 90, ssl: 88 },
 ];
 
 // Deterministic pseudo-noise so reseeding gives the same charts.
@@ -45,14 +53,33 @@ async function main() {
           checkedAt,
         },
       });
+      if (d > 0) {
+        await prisma.healthCheck.create({
+          data: {
+            siteId: site.id,
+            status: d === 12 && k === 2 ? "error" : "healthy",
+            wpVersion: "6.8.1",
+            plugins: 14 + k * 3,
+            responseTime: Math.round(220 + (100 - score) * 7 + noise(d, k + 4) * 90),
+            checkedAt,
+          },
+        });
+      }
+    }
+
+    // Today: 48 half-hourly checks, oldest first.
+    for (let i = 47; i >= 0; i--) {
+      const inc = incidents[k] ?? {};
+      const status = inc.error?.includes(i) ? "error" : inc.warning?.includes(i) ? "warning" : "healthy";
+      const slow = status === "healthy" ? 0 : status === "warning" ? 600 : 1500;
       await prisma.healthCheck.create({
         data: {
           siteId: site.id,
-          status: d === 12 && k === 2 ? "error" : "healthy",
+          status,
           wpVersion: "6.8.1",
           plugins: 14 + k * 3,
-          responseTime: Math.round(220 + (100 - score) * 7 + noise(d, k + 4) * 90),
-          checkedAt,
+          responseTime: Math.round(220 + (100 - s.base) * 7 + noise(i, k + 4) * 90 + slow),
+          checkedAt: new Date(now - i * HALF_HOUR),
         },
       });
     }
