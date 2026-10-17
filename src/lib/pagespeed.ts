@@ -22,7 +22,7 @@ export async function fetchPageSpeed(
     params.append('category', cat)
   }
 
-  const res = await fetch(`${PSI_URL}?${params}`)
+  const res = await fetch(`${PSI_URL}?${params}`, { signal: AbortSignal.timeout(90_000) })
   if (!res.ok) {
     const text = await res.text()
     throw new Error(`PageSpeed API error ${res.status}: ${text}`)

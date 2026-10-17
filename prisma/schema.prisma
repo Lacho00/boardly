@@ -35,7 +35,9 @@ model Alert {
   severity  String   @default("warning")
   read      Boolean  @default(false)
   createdAt DateTime @default(now())
-  site      Site     @relation(fields: [siteId], references: [id])
+  site      Site     @relation(fields: [siteId], references: [id], onDelete: Cascade)
+
+  @@index([siteId, type, createdAt])
 }
 
 model Config {
@@ -53,7 +55,9 @@ model HealthCheck {
   plugins      Int?
   responseTime Int?
   checkedAt    DateTime @default(now())
-  site         Site     @relation(fields: [siteId], references: [id])
+  site         Site     @relation(fields: [siteId], references: [id], onDelete: Cascade)
+
+  @@index([siteId, checkedAt])
 }
 
 model PerformanceSnapshot {
@@ -66,7 +70,9 @@ model PerformanceSnapshot {
   score          Int?
   bestPractices  Int?
   checkedAt      DateTime @default(now())
-  site           Site     @relation(fields: [siteId], references: [id])
+  site           Site     @relation(fields: [siteId], references: [id], onDelete: Cascade)
+
+  @@index([siteId, checkedAt])
 }
 
 model SeoAudit {
@@ -78,7 +84,9 @@ model SeoAudit {
   imgNoAlt    Int?
   score       Int?
   checkedAt   DateTime @default(now())
-  site        Site     @relation(fields: [siteId], references: [id])
+  site        Site     @relation(fields: [siteId], references: [id], onDelete: Cascade)
+
+  @@index([siteId, checkedAt])
 }
 
 model AccessibilityScore {
@@ -87,7 +95,9 @@ model AccessibilityScore {
   score     Int?
   issues    Int?
   checkedAt DateTime @default(now())
-  site      Site     @relation(fields: [siteId], references: [id])
+  site      Site     @relation(fields: [siteId], references: [id], onDelete: Cascade)
+
+  @@index([siteId, checkedAt])
 }
 
 model SslCheck {
@@ -98,7 +108,9 @@ model SslCheck {
   daysRemaining Int?
   issuer        String?
   checkedAt     DateTime @default(now())
-  site          Site     @relation(fields: [siteId], references: [id])
+  site          Site     @relation(fields: [siteId], references: [id], onDelete: Cascade)
+
+  @@index([siteId, checkedAt])
 }
 
 model MonthlyReport {
@@ -112,7 +124,7 @@ model MonthlyReport {
   uptime           Float?
   pdfUrl           String?
   createdAt        DateTime @default(now())
-  site             Site     @relation(fields: [siteId], references: [id])
+  site             Site     @relation(fields: [siteId], references: [id], onDelete: Cascade)
 
   @@unique([siteId, month, year])
 }

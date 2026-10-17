@@ -44,7 +44,7 @@ export async function checkAndAlert() {
       await sendAlert(
         site.id,
         'downtime',
-        `El sitio dejó de responder. Último check: ${current.responseTime ?? '?'}ms, HTTP ${current.status}`,
+        `El sitio dejó de responder. Último check: ${current.responseTime ?? '?'}ms`,
         'critical'
       )
     }
@@ -59,11 +59,14 @@ export async function checkAndAlert() {
     }
   }
 
-  const sslCheck = await prisma.sslCheck.findMany({
-    where: { daysRemaining: { lte: 14 } },
+  // Latest check per active site first, then filter: an old low reading must not
+  // keep alerting after the certificate was renewed.
+  const latestSsl = await prisma.sslCheck.findMany({
+    where: { site: { active: true } },
     orderBy: { checkedAt: 'desc' },
     distinct: ['siteId'],
   })
+  const sslCheck = latestSsl.filter(s => s.daysRemaining != null && s.daysRemaining <= 14)
 
   for (const ssl of sslCheck) {
     const alreadyAlerted = await prisma.alert.findFirst({

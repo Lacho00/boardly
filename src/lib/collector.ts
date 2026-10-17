@@ -69,6 +69,10 @@ export async function collectMetricsForSite(siteId: string) {
 export async function collectAllSites() {
   const sites = await prisma.site.findMany({ where: { active: true } })
   for (const site of sites) {
-    await collectMetricsForSite(site.id)
+    try {
+      await collectMetricsForSite(site.id)
+    } catch (e) {
+      console.error(`Collection failed for site ${site.id}:`, e)
+    }
   }
 }

@@ -38,8 +38,14 @@ export async function checkWordPressHealth(url: string): Promise<HealthCheckResu
     || wpJson.ok
     || readme.text.includes('WordPress')
 
-  if (!isWp) {
+  // Availability first: no response or a 5xx is downtime, whatever the site runs.
+  if (homepage.status === 0 || homepage.status >= 500) {
     return { status: 'error', wpVersion: null, pluginsDetected: null, responseTimeMs }
+  }
+
+  // Site answers but WordPress markers are missing: flag it, do not call it down.
+  if (!isWp) {
+    return { status: 'warning', wpVersion: null, pluginsDetected: null, responseTimeMs }
   }
 
   let wpVersion: string | null = null
