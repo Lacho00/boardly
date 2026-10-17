@@ -49,7 +49,7 @@ export function WpPasswordForm({ siteId, currentPassword }: { siteId: string; cu
         placeholder={currentPassword ? '•••••••• (leave empty to clear)' : 'user:app_password'}
         className="bg-zinc-700 border border-zinc-600 rounded px-3 py-1.5 text-sm flex-1"
       />
-      <SubmitButton pendingLabel="Saving..." className="bg-blue-700 hover:bg-blue-600 px-3 py-1.5 rounded text-sm">Save</SubmitButton>
+      <SubmitButton pendingLabel="Saving…" className="bg-blue-700 hover:bg-blue-600 px-3 py-1.5 rounded text-sm">Save</SubmitButton>
       <ActionMessage state={state} />
     </form>
   )

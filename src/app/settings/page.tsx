@@ -32,7 +32,7 @@ export default function SettingsPage() {
     <div className="min-h-screen bg-zinc-900 text-zinc-100">
       <header className="border-b border-zinc-700 px-6 py-4">
         <div className="max-w-3xl mx-auto flex items-center gap-4">
-          <Link href="/" className="text-blue-400 hover:underline text-sm"><span aria-hidden="true">←</span> Dashboard</Link>
+          <Link href="/" className="text-blue-400 hover:underline text-sm py-2"><span aria-hidden="true">←</span> Dashboard</Link>
           <h1 className="text-xl font-bold">Settings</h1>
         </div>
       </header>
@@ -49,7 +49,7 @@ export default function SettingsPage() {
               spellCheck={false}
               value={webhook}
               onChange={e => setWebhook(e.target.value)}
-              placeholder="https://hooks.slack.com/services/..."
+              placeholder="https://hooks.slack.com/services/…"
               className="w-full bg-zinc-700 border border-zinc-600 rounded px-3 py-2 text-sm"
             />
             <p className="text-xs text-zinc-400 mt-1">

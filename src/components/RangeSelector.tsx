@@ -10,7 +10,7 @@ export function RangeSelector({ current }: { current: Range }) {
           href={`?range=${r}`}
           scroll={false}
           aria-current={r === current ? 'true' : undefined}
-          className={`px-3 py-1 rounded text-sm ${r === current ? 'bg-blue-700' : 'bg-zinc-700 hover:bg-zinc-600'}`}
+          className={`px-3 py-2 rounded text-sm ${r === current ? 'bg-blue-700' : 'bg-zinc-700 hover:bg-zinc-600'}`}
         >
           {r}d
         </Link>
