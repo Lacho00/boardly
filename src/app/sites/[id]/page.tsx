@@ -47,7 +47,7 @@ export default async function SitePage({ params, searchParams }: {
 
       <main className="max-w-6xl mx-auto p-6 grid gap-6">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <StatCard label="Performance" value={p?.score != null ? `${p.score}/100` : '-'} sub={p?.checkedAt ? new Date(p.checkedAt).toLocaleString() : ''} />
+          <StatCard label="Performance" value={p?.score != null ? `${p.score}/100` : '-'} sub={p?.checkedAt ? new Date(p.checkedAt).toLocaleString('en-US') : ''} />
           <StatCard label="Accessibility" value={a?.score != null ? `${a.score}/100` : '-'} sub={`Best Pract: ${p?.bestPractices ?? '-'}/100`} />
           <StatCard label="SEO" value={seo?.score != null ? `${seo.score}/100` : '-'} sub="" />
           <StatCard label="WP Health" value={h?.status ?? '-'} sub={h?.wpVersion ? `WP ${h.wpVersion}` : h?.responseTime ? `${h.responseTime}ms` : ''} />
