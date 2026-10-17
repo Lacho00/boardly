@@ -1,4 +1,5 @@
 import type { Prisma } from '@prisma/client'
+import type { Severity } from '@/lib/severity'
 
 const latest = (take: number) => ({ orderBy: { checkedAt: 'desc' as const }, take })
 
@@ -51,3 +52,10 @@ export type ActionState = {
   message: string
   fields?: Record<string, string>
 } | null
+
+/** Home list row: latest rows of each check plus the 24 h checks, 30-day uptime and severity. */
+export type HomeSite = SiteSummaryData & {
+  recent: { status: string; responseTime: number | null; checkedAt: Date }[]
+  uptime30: number | null
+  severity: Severity
+}
