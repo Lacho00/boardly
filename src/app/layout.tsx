@@ -17,6 +17,9 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL ?? "https://boardly-silk.vercel.app",
+  ),
   title: "Boardly",
   description: "Uptime, performance, SSL and SEO monitoring for your websites",
   openGraph: {
