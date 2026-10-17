@@ -19,6 +19,13 @@ const spaceGrotesk = Space_Grotesk({
 export const metadata: Metadata = {
   title: "Boardly",
   description: "Uptime, performance, SSL and SEO monitoring for your websites",
+  openGraph: {
+    title: "Boardly",
+    description: "Uptime, performance, SSL and SEO monitoring for your websites",
+    siteName: "Boardly",
+    type: "website",
+  },
+  twitter: { card: "summary_large_image" },
 };
 
 export const viewport: Viewport = {
