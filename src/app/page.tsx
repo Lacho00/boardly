@@ -1,34 +1,39 @@
 import Link from 'next/link'
 import { RefreshButton } from '@/components/RefreshButton'
 import { AddSiteForm } from '@/components/AddSiteForm'
-import { getCriticalAlertCount, getSites } from '@/lib/queries'
+import { AppHeader } from '@/components/AppHeader'
+import { getSites } from '@/lib/queries'
+import { siteSeverity } from '@/lib/severity'
 import { lcpTone, responseTone, scoreTone, sslTone, toneClass, type Tone } from '@/lib/scores'
 import type { SiteSummaryData } from '@/lib/types'
 
 export const dynamic = 'force-dynamic'
 
 export default async function Home() {
-  const [sites, alerts] = await Promise.all([getSites(), getCriticalAlertCount()])
+  const sites = await getSites()
+  const summary = { critical: 0, warning: 0, healthy: 0 }
+  for (const site of sites) {
+    const sev = siteSeverity({
+      health: site.healthChecks?.[0]?.status,
+      sslValid: site.sslChecks?.[0]?.valid,
+      sslDays: site.sslChecks?.[0]?.daysRemaining,
+    })
+    if (sev !== 'unknown') summary[sev] += 1
+  }
 
   return (
     <div className="min-h-screen bg-zinc-900 text-zinc-100">
-      <header className="border-b border-zinc-700 px-6 py-4">
-        <div className="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-y-3">
+      <AppHeader active="sites" summary={summary} />
+      <div className="border-b border-zinc-700 px-6 py-3">
+        <div className="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-x-4 gap-y-3">
           <h1 className="text-xl font-bold">Central Dashboard</h1>
           <div className="flex flex-wrap gap-3 items-center">
-            <Link href="/alerts" className="text-xs relative">
-              {alerts > 0
-                ? <span className="text-red-400 font-bold"><span aria-hidden="true">🔔</span> {alerts} {alerts === 1 ? 'alert' : 'alerts'}</span>
-                : <span className="text-zinc-400 hover:text-zinc-200">Alerts</span>}
-            </Link>
-            <Link href="/reports" className="text-xs text-zinc-400 hover:text-zinc-200">Reports</Link>
-            <a href="/api/report-preview/general" target="_blank" rel="noopener noreferrer" className="text-xs text-zinc-400 hover:text-zinc-200">General PDF</a>
-            <Link href="/settings" className="text-xs text-zinc-400 hover:text-zinc-200">Settings</Link>
+            <a href="/api/report-preview/general" target="_blank" rel="noopener noreferrer" className="text-xs text-zinc-400 hover:text-zinc-200 py-1">General PDF</a>
             <RefreshButton />
             <AddSiteForm />
           </div>
         </div>
-      </header>
+      </div>
 
       <main className="max-w-6xl mx-auto p-6">
         {sites.length === 0 ? (

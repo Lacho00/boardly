@@ -2,10 +2,10 @@
 export type Tone = 'good' | 'warn' | 'bad' | 'none'
 
 export const toneClass: Record<Tone, string> = {
-  good: 'text-green-400',
-  warn: 'text-yellow-400',
-  bad: 'text-red-400',
-  none: 'text-zinc-100',
+  good: 'text-ok',
+  warn: 'text-warn',
+  bad: 'text-crit',
+  none: 'text-ink',
 }
 
 /** Lighthouse bands: 90+ good, 50-89 needs work, below 50 poor. */
