@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Dashboard Centralizado",
-  description: "Monitoreo centralizado de sitios web",
+  title: "Boardly",
+  description: "Uptime, performance, SSL and SEO monitoring for your websites",
 };
 
 export default function RootLayout({
