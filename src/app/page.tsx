@@ -2,24 +2,10 @@
 
 import { useEffect, useState } from 'react'
 import { readJson, writeOk } from '@/lib/api-client'
-
-type Snapshot = { score: number | null; bestPractices: number | null; lcp: number | null; cls: number | null; checkedAt: string }
-type Health = { status: string; responseTime: number | null; wpVersion: string | null; checkedAt: string }
-type Seo = { title: string | null; description: string | null; h1Count: number | null; imgNoAlt: number | null }
-type A11y = { score: number | null; issues: number | null }
-type Ssl = { valid: boolean; daysRemaining: number | null; expiresAt: string | null }
-
-type Site = {
-  id: string; name: string; url: string; type: string; active: boolean
-  healthChecks: Health[]
-  performanceSnapshots: Snapshot[]
-  seoAudits: Seo[]
-  accessibilityScores: A11y[]
-  sslChecks: Ssl[]
-}
+import type { SiteSummary } from '@/lib/types'
 
 export default function Home() {
-  const [sites, setSites] = useState<Site[]>([])
+  const [sites, setSites] = useState<SiteSummary[]>([])
   const [loading, setLoading] = useState(true)
   const [alerts, setAlerts] = useState<number>(0)
 
@@ -28,7 +14,7 @@ export default function Home() {
   async function fetchSites() {
     setLoading(true)
     try {
-      const data = await fetch('/api/sites').then(r => readJson<Site[]>(r))
+      const data = await fetch('/api/sites').then(r => readJson<SiteSummary[]>(r))
       setSites(Array.isArray(data) ? data : [])
     } catch {
       setSites([])
@@ -77,7 +63,7 @@ export default function Home() {
   )
 }
 
-function SiteCard({ site }: { site: Site }) {
+function SiteCard({ site }: { site: SiteSummary }) {
   const h = site.healthChecks?.[0]
   const p = site.performanceSnapshots?.[0]
   const a = site.accessibilityScores?.[0]
