@@ -15,7 +15,7 @@ export function AddSiteForm() {
 
   if (!open) {
     return (
-      <button onClick={() => setOpenedFor(state)} className="bg-blue-600 hover:bg-blue-500 px-4 py-2 rounded text-sm font-medium">
+      <button onClick={() => setOpenedFor(state)} className="rounded-[3px] border border-ok px-4 py-2 text-sm text-ok enabled:hover:bg-ok/10">
         + Add site
       </button>
     )
@@ -23,10 +23,10 @@ export function AddSiteForm() {
 
   return (
     <form action={formAction} className="flex flex-wrap gap-2 items-center">
-      <input name="name" aria-label="Site name" autoComplete="off" placeholder="Name" defaultValue={state?.fields?.name} required className="bg-zinc-700 border border-zinc-600 rounded px-3 py-1.5 text-sm w-40" />
-      <input name="url" aria-label="Site URL" autoComplete="off" spellCheck={false} placeholder="https://example.com" defaultValue={state?.fields?.url} required type="url" className="bg-zinc-700 border border-zinc-600 rounded px-3 py-1.5 text-sm w-60" />
-      <SubmitButton pendingLabel="Saving…" className="bg-green-700 hover:bg-green-600 px-3 py-1.5 rounded text-sm">Save</SubmitButton>
-      <button type="button" onClick={() => setOpenedFor(undefined)} className="text-zinc-400 hover:text-zinc-200 text-sm">Cancel</button>
+      <input name="name" aria-label="Site name" autoComplete="off" placeholder="Name" defaultValue={state?.fields?.name} required className="bg-bg border border-line rounded-[3px] px-3 py-1.5 text-sm text-ink placeholder:text-dim focus:border-ok w-40" />
+      <input name="url" aria-label="Site URL" autoComplete="off" spellCheck={false} placeholder="https://example.com" defaultValue={state?.fields?.url} required type="url" className="bg-bg border border-line rounded-[3px] px-3 py-1.5 text-sm text-ink placeholder:text-dim focus:border-ok w-60" />
+      <SubmitButton pendingLabel="Saving…" className="rounded-[3px] border border-ok text-ok enabled:hover:bg-ok/10 px-3 py-1.5 text-sm">Save</SubmitButton>
+      <button type="button" onClick={() => setOpenedFor(undefined)} className="py-1 text-dim hover:text-ink text-sm">Cancel</button>
       {!state?.ok && <ActionMessage state={state} />}
     </form>
   )
