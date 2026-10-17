@@ -2,6 +2,8 @@
 
 Monitor performance, uptime, SSL and SEO for several websites from one dashboard. Built with Next.js, React and Prisma.
 
+**[Live demo](https://boardly-silk.vercel.app)**: read-only, with fictional data. Scans, edits and alerts are disabled.
+
 ![Dashboard](docs/screenshots/dashboard.jpg)
 
 ## What it does
