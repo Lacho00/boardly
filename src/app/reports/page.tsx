@@ -121,7 +121,7 @@ function MetricBadge({ label, value, isUptime }: { label: string; value: number 
   const shown = Number(value.toFixed(isUptime ? 1 : 0))
   const color = isUptime
     ? shown >= 100 ? 'text-green-400' : shown >= 99.5 ? 'text-yellow-400' : 'text-red-400'
-    : value >= 80 ? 'text-green-400' : value >= 50 ? 'text-yellow-400' : 'text-red-400'
+    : shown >= 80 ? 'text-green-400' : shown >= 50 ? 'text-yellow-400' : 'text-red-400'
 
   return (
     <div className="flex flex-col items-center min-w-[60px] bg-zinc-750 rounded-lg px-3 py-1.5 border border-zinc-700">
