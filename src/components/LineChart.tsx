@@ -9,9 +9,9 @@ import {
 const BASE: Layout = { width: 640, height: 192, left: 44, right: 12, top: 10, bottom: 24 }
 
 const BAND_FILL: Record<Rating, string> = {
-  good: '#22c55e',
-  'needs-improvement': '#eab308',
-  poor: '#ef4444',
+  good: 'var(--ok)',
+  'needs-improvement': 'var(--warn)',
+  poor: 'var(--crit)',
 }
 const BAND_LABEL: Record<Rating, string> = { good: 'Good', 'needs-improvement': 'Needs improvement', poor: 'Poor' }
 
@@ -77,17 +77,17 @@ export function LineChart({ title, unit = '', decimals = 2, series, thresholds }
   const flip = tipX > LAYOUT.width * 0.6
 
   return (
-    <div className="bg-zinc-800 rounded-lg p-5 border border-zinc-700">
+    <div className="rounded-lg border border-line bg-panel p-5">
       <h3 className="font-semibold mb-3">{title}</h3>
 
       <div ref={frame}>
       {!hasData ? (
-        <p className="text-sm text-zinc-400">No data in this range</p>
+        <p className="text-sm text-dim">No data in this range</p>
       ) : (
         <div
           role="group"
           aria-roledescription="line chart"
-          className="relative rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+          className="relative rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-ink"
           tabIndex={0}
           aria-label={`${title} chart. Use the left and right arrow keys to read each value.`}
           aria-describedby={`${id}-summary ${id}-reading`}
@@ -109,12 +109,12 @@ export function LineChart({ title, unit = '', decimals = 2, series, thresholds }
             ))}
             {geo.yTicks.map(t => (
               <g key={t}>
-                <line x1={LAYOUT.left} x2={plotRight} y1={geo.y(t)} y2={geo.y(t)} stroke="#3f3f46" strokeWidth={1} />
-                <text x={LAYOUT.left - 6} y={geo.y(t)} textAnchor="end" dominantBaseline="middle" fontSize={11} fill="#71717a">{format(t)}</text>
+                <line x1={LAYOUT.left} x2={plotRight} y1={geo.y(t)} y2={geo.y(t)} className="stroke-line" strokeWidth={1} />
+                <text x={LAYOUT.left - 6} y={geo.y(t)} textAnchor="end" dominantBaseline="middle" fontSize={11} className="fill-dim">{format(t)}</text>
               </g>
             ))}
             {[0, times.length - 1].filter((v, i, a) => times.length > 0 && a.indexOf(v) === i).map(i => (
-              <text key={i} x={geo.xs[i]} y={plotBottom + 16} textAnchor={i === 0 && times.length > 1 ? 'start' : times.length > 1 ? 'end' : 'middle'} fontSize={11} fill="#71717a">
+              <text key={i} x={geo.xs[i]} y={plotBottom + 16} textAnchor={i === 0 && times.length > 1 ? 'start' : times.length > 1 ? 'end' : 'middle'} fontSize={11} className="fill-dim">
                 {dateFormat.format(times[i])}
               </text>
             ))}
@@ -126,9 +126,9 @@ export function LineChart({ title, unit = '', decimals = 2, series, thresholds }
             ))}
             {active !== null && (
               <g>
-                <line x1={tipX} x2={tipX} y1={LAYOUT.top} y2={plotBottom} stroke="#a1a1aa" strokeWidth={1} strokeDasharray="3 3" />
+                <line x1={tipX} x2={tipX} y1={LAYOUT.top} y2={plotBottom} className="stroke-dim" strokeWidth={1} strokeDasharray="3 3" />
                 {readings.map(({ s, p }) => p && p.v !== null && (
-                  <circle key={s.key} cx={tipX} cy={geo.y(p.v)} r={4} fill={s.color} stroke="#27272a" strokeWidth={2} />
+                  <circle key={s.key} cx={tipX} cy={geo.y(p.v)} r={4} fill={s.color} className="stroke-panel" strokeWidth={2} />
                 ))}
               </g>
             )}
@@ -136,15 +136,15 @@ export function LineChart({ title, unit = '', decimals = 2, series, thresholds }
 
           {active !== null && activeTime !== null && (
             <div
-              className="pointer-events-none absolute top-0 z-10 rounded border border-zinc-600 bg-zinc-900 px-2 py-1 text-xs shadow"
+              className="pointer-events-none absolute top-0 z-10 rounded border border-line bg-bg px-2 py-1 text-xs shadow"
               style={{ left: tipLeft, transform: `translateX(${flip ? 'calc(-100% - 8px)' : '8px'})` }}
             >
-              <p className="text-zinc-400">{dateFormat.format(activeTime)}</p>
+              <p className="text-dim">{dateFormat.format(activeTime)}</p>
               {readings.map(({ s, p }) => (
                 <p key={s.key} className="flex items-center gap-1.5">
                   <span className="inline-block h-2 w-2 rounded-full" style={{ background: s.color }} />
                   <span>{s.label}: {p && p.v !== null ? `${format(p.v)}${unit}` : '-'}</span>
-                  {thresholds && p && p.v !== null && <span className="text-zinc-400">({BAND_LABEL[rate(p.v, thresholds)]})</span>}
+                  {thresholds && p && p.v !== null && <span className="text-dim">({BAND_LABEL[rate(p.v, thresholds)]})</span>}
                 </p>
               ))}
             </div>
@@ -161,7 +161,7 @@ export function LineChart({ title, unit = '', decimals = 2, series, thresholds }
       </div>
 
       {hasData && thresholds && (
-        <ul className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-zinc-400">
+        <ul className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-dim">
           {(['good', 'needs-improvement', 'poor'] as const).map(r => (
             <li key={r} className="flex items-center gap-1.5">
               <span className="inline-block h-2 w-3 rounded-sm" style={{ background: BAND_FILL[r], opacity: 0.5 }} />
@@ -171,19 +171,19 @@ export function LineChart({ title, unit = '', decimals = 2, series, thresholds }
         </ul>
       )}
 
-      <details className="mt-3 text-xs text-zinc-400">
-        <summary className="cursor-pointer hover:text-zinc-200">View data table</summary>
+      <details className="mt-3 text-xs text-dim">
+        <summary className="cursor-pointer hover:text-ink">View data table</summary>
         {hasData ? (
           <table className="mt-2 w-full text-left">
             <thead>
-              <tr className="text-zinc-400">
+              <tr className="text-dim">
                 <th scope="col" className="py-1 pr-4 font-medium">Date</th>
                 {series.map(s => <th key={s.key} scope="col" className="py-1 pr-4 font-medium">{s.label}{unit && ` (${unit})`}</th>)}
               </tr>
             </thead>
             <tbody>
               {times.map(t => (
-                <tr key={t} className="border-t border-zinc-700">
+                <tr key={t} className="border-t border-line">
                   <th scope="row" className="py-1 pr-4 font-normal">{dateFormat.format(t)}</th>
                   {series.map(s => {
                     const v = s.points.find(p => p.t === t)?.v
