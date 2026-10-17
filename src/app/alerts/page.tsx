@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { readJson, writeOk } from '@/lib/api-client'
 
 type AlertItem = {
   id: string
@@ -16,7 +17,7 @@ export default function AlertsPage() {
   const [alerts, setAlerts] = useState<AlertItem[]>([])
 
   useEffect(() => {
-    fetch('/api/alerts').then(r => r.json()).then(setAlerts)
+    fetch('/api/alerts').then(r => readJson<AlertItem[]>(r)).then(d => setAlerts(Array.isArray(d) ? d : [])).catch(() => setAlerts([]))
   }, [])
 
   const severityColor: Record<string, string> = {

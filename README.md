@@ -37,7 +37,9 @@ npm run dev
 
 Open http://localhost:3000. `GOOGLE_PSI_API_KEY` is optional and raises the PageSpeed Insights quota.
 
-To collect real data, add your sites in the app and call `GET /api/cron/collect` and `GET /api/cron/health` from any scheduler. Set the Slack webhook under Config.
+To collect real data, add your sites in the app and call `GET /api/cron/collect` and `GET /api/cron/health` from any scheduler. Set `CRON_SECRET` to require `Authorization: Bearer <secret>` on those routes. Set the Slack webhook under Config.
+
+Boardly has no user authentication. Do not expose a non-demo instance to the public internet without putting it behind your own auth (reverse proxy, VPN or similar).
 
 ## Project layout
 

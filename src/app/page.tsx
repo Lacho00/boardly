@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { readJson, writeOk } from '@/lib/api-client'
 
 type Snapshot = { score: number | null; bestPractices: number | null; lcp: number | null; cls: number | null; checkedAt: string }
 type Health = { status: string; responseTime: number | null; wpVersion: string | null; checkedAt: string }
@@ -26,14 +27,19 @@ export default function Home() {
 
   async function fetchSites() {
     setLoading(true)
-    const data = await fetch('/api/sites').then(r => r.json())
-    setSites(data)
-    setLoading(false)
+    try {
+      const data = await fetch('/api/sites').then(r => readJson<Site[]>(r))
+      setSites(Array.isArray(data) ? data : [])
+    } catch {
+      setSites([])
+    } finally {
+      setLoading(false)
+    }
   }
 
   async function fetchAlerts() {
-    const data = await fetch('/api/alerts').then(r => r.json())
-    setAlerts(data.filter((a: any) => a.severity === 'critical').length)
+    const data = await fetch('/api/alerts').then(r => readJson<{ severity: string }[]>(r)).catch(() => null)
+    setAlerts(Array.isArray(data) ? data.filter(a => a.severity === 'critical').length : 0)
   }
 
   return (
@@ -123,11 +129,12 @@ function AddSiteForm({ onAdded }: { onAdded: () => void }) {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    await fetch('/api/sites', {
+    const res = await fetch('/api/sites', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ name, url }),
     })
+    if (!(await writeOk(res))) return
     setName(''); setUrl(''); setOpen(false); onAdded()
   }
 

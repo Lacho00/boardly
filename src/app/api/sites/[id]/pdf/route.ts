@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { safeFilename } from '@/lib/security'
 import { StandardFonts } from 'pdf-lib'
 import { M, W, H, CW, C, clr, statClr, scoreClr, lcpClr, daysClr, box, card, secTitle, createDoc } from '@/lib/pdf-helper'
 
@@ -114,7 +115,7 @@ export async function GET(
   return new NextResponse(pdfBytes, {
     headers: {
       'Content-Type': 'application/pdf',
-      'Content-Disposition': `attachment; filename="${site.name}-reporte-${new Date().toISOString().slice(0, 10)}.pdf"`,
+      'Content-Disposition': `attachment; filename="${safeFilename(site.name)}-reporte-${new Date().toISOString().slice(0, 10)}.pdf"`,
     },
   })
 }

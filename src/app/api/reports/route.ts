@@ -23,6 +23,9 @@ export async function POST() {
     const perf = await prisma.performanceSnapshot.findMany({
       where: { siteId: site.id, checkedAt: { gte: startOfMonth, lte: endOfMonth } },
     })
+    const seo = await prisma.seoAudit.findMany({
+      where: { siteId: site.id, checkedAt: { gte: startOfMonth, lte: endOfMonth } },
+    })
     const a11y = await prisma.accessibilityScore.findMany({
       where: { siteId: site.id, checkedAt: { gte: startOfMonth, lte: endOfMonth } },
     })
@@ -32,12 +35,12 @@ export async function POST() {
 
     const avgPerformance = perf.length > 0
       ? perf.reduce((s, r) => s + (r.score ?? 0), 0) / perf.length : null
-    const avgSeo = perf.length > 0
-      ? perf.reduce((s, r) => s + (r.score ?? 0), 0) / perf.length : null
+    const avgSeo = seo.length > 0
+      ? seo.reduce((s, r) => s + (r.score ?? 0), 0) / seo.length : null
     const avgAccessibility = a11y.length > 0
       ? a11y.reduce((s, r) => s + (r.score ?? 0), 0) / a11y.length : null
     const uptime = health.length > 0
-      ? (health.filter(h => h.status !== 'error').length / health.length) * 100 : null
+      ? (health.filter(h => h.status !== 'error' && h.status !== 'critical').length / health.length) * 100 : null
 
     await prisma.monthlyReport.upsert({
       where: { siteId_month_year: { siteId: site.id, month, year } },
