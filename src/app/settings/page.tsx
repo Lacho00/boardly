@@ -29,7 +29,7 @@ export default function SettingsPage() {
       <header className="border-b border-zinc-700 px-6 py-4">
         <div className="max-w-3xl mx-auto flex items-center gap-4">
           <Link href="/" className="text-blue-400 hover:underline text-sm">← Dashboard</Link>
-          <h1 className="text-xl font-bold">Configuración</h1>
+          <h1 className="text-xl font-bold">Settings</h1>
         </div>
       </header>
 
@@ -45,13 +45,13 @@ export default function SettingsPage() {
               className="w-full bg-zinc-700 border border-zinc-600 rounded px-3 py-2 text-sm"
             />
             <p className="text-xs text-zinc-500 mt-1">
-              Recibirás alertas cuando un sitio deje de responder o el SSL esté por expirar.
+              You will receive alerts when a site stops responding or its SSL certificate is about to expire.
             </p>
           </div>
 
           <div className="flex items-center gap-3">
-            <button type="submit" className="bg-blue-700 hover:bg-blue-600 px-4 py-2 rounded text-sm">Guardar</button>
-            {saved && <span className="text-green-400 text-sm">✓ Guardado</span>}
+            <button type="submit" className="bg-blue-700 hover:bg-blue-600 px-4 py-2 rounded text-sm">Save</button>
+            {saved && <span className="text-green-400 text-sm">✓ Saved</span>}
           </div>
         </form>
       </main>

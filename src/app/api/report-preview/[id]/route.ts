@@ -33,8 +33,8 @@ export async function GET(
   const s = site.sslChecks[0]
 
   const now = new Date()
-  const dateStr = now.toLocaleDateString('es', { year: 'numeric', month: 'long', day: 'numeric' })
-  const fullDateStr = now.toLocaleString()
+  const dateStr = now.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+  const fullDateStr = now.toLocaleString('en-US')
 
   const lcpGood = p?.lcp != null && p.lcp <= 2.5
   const lcpAvg = p?.lcp != null && p.lcp > 2.5 && p.lcp <= 4
@@ -44,17 +44,17 @@ export async function GET(
   const ttfbAvg = p?.ttfb != null && p.ttfb > 0.4 && p.ttfb <= 0.8
 
   const html = `<!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Reporte - ${escapeHtml(site.name)}</title>
+<title>Report - ${escapeHtml(site.name)}</title>
 <style>
 *, *::before, *::after { box-sizing: border-box; }
 @page {
   size: A4;
   margin: 15mm 12mm;
   @bottom-right {
-    content: "Página " counter(page);
+    content: "Page " counter(page);
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-size: 8pt;
     color: #94a3b8;
@@ -151,7 +151,7 @@ body {
 </style>
 </head>
 <body>
-<button class="print-btn" onclick="window.print()">Descargar PDF</button>
+<button class="print-btn" onclick="window.print()">Download PDF</button>
 
 <div class="report-container">
 <div class="header-banner">
@@ -162,37 +162,37 @@ body {
     </div>
     <div class="header-cell header-right">
       <p class="meta-date">${dateStr}</p>
-      <p class="meta-generated">Dashboard Centralizado · Generado el ${fullDateStr}</p>
+      <p class="meta-generated">Centralized Dashboard · Generated on ${fullDateStr}</p>
     </div>
   </div>
 </div>
 
 <div class="status-container">
   <div class="status-column">
-    <div class="stat-label">Estado del Sitio</div>
+    <div class="stat-label">Site Status</div>
     <div class="stat-value">
-      <span class="badge badge-${h?.status === 'healthy' ? 'healthy' : h?.status === 'warning' ? 'warning' : 'error'}">${(h?.status ?? 'Sin datos').toUpperCase()}</span>
+      <span class="badge badge-${h?.status === 'healthy' ? 'healthy' : h?.status === 'warning' ? 'warning' : 'error'}">${(h?.status ?? 'No data').toUpperCase()}</span>
     </div>
   </div>
   <div class="status-column">
-    <div class="stat-label">Tiempo de Respuesta</div>
+    <div class="stat-label">Response Time</div>
     <div class="stat-value">${h?.responseTime != null ? `${h.responseTime} ms` : 'N/A'}</div>
   </div>
   <div class="status-column">
-    <div class="stat-label">Seguridad SSL</div>
+    <div class="stat-label">SSL Security</div>
     <div class="stat-value">
-      <span class="badge badge-${s?.valid ? 'healthy' : 'error'}">${s?.valid ? (s.daysRemaining != null ? `${s.daysRemaining} días` : 'Válido') : 'No Válido / No Disp.'}</span>
+      <span class="badge badge-${s?.valid ? 'healthy' : 'error'}">${s?.valid ? (s.daysRemaining != null ? `${s.daysRemaining} days` : 'Valid') : 'Invalid / N/A'}</span>
     </div>
   </div>
 </div>
 
-<div class="section-title">Puntuaciones de Rendimiento y Auditoría</div>
+<div class="section-title">Performance and Audit Scores</div>
 
 <div class="scores-container">
   <div class="score-block">
     <div class="score-card">
       <div class="score-circle ${scoreClass(p?.score)}">${p?.score ?? '—'}</div>
-      <div class="score-name">Rendimiento</div>
+      <div class="score-name">Performance</div>
     </div>
   </div>
   <div class="score-block">
@@ -204,7 +204,7 @@ body {
   <div class="score-block">
     <div class="score-card">
       <div class="score-circle ${scoreClass(a?.score)}">${a?.score ?? '—'}</div>
-      <div class="score-name">Accesibilidad</div>
+      <div class="score-name">Accessibility</div>
     </div>
   </div>
   <div class="score-block">
@@ -215,7 +215,7 @@ body {
   </div>
 </div>
 
-<div class="section-title">Métricas de Carga Clave (Core Web Vitals)</div>
+<div class="section-title">Key Loading Metrics (Core Web Vitals)</div>
 
 <div class="metrics-table">
   <div class="metrics-row">
@@ -223,65 +223,65 @@ body {
       <div class="metric-card">
         <div class="metric-card-title">LCP (Largest Contentful Paint)</div>
         <div class="metric-card-value" style="color: ${lcpGood ? '#15803d' : lcpAvg ? '#a16207' : '#b91c1c'};">${p?.lcp != null ? `${p.lcp.toFixed(2)}s` : '—'}</div>
-        <div class="metric-card-desc">Carga del elemento principal</div>
+        <div class="metric-card-desc">Main element load time</div>
       </div>
     </div>
     <div class="metrics-cell">
       <div class="metric-card">
         <div class="metric-card-title">CLS (Cumulative Layout Shift)</div>
         <div class="metric-card-value" style="color: ${clsGood ? '#15803d' : clsAvg ? '#a16207' : '#b91c1c'};">${p?.cls != null ? p.cls.toFixed(3) : '—'}</div>
-        <div class="metric-card-desc">Estabilidad visual de la página</div>
+        <div class="metric-card-desc">Page visual stability</div>
       </div>
     </div>
     <div class="metrics-cell">
       <div class="metric-card">
         <div class="metric-card-title">TTFB (Time to First Byte)</div>
         <div class="metric-card-value" style="color: ${ttfbGood ? '#15803d' : ttfbAvg ? '#a16207' : '#b91c1c'};">${p?.ttfb != null ? `${p.ttfb.toFixed(2)}s` : '—'}</div>
-        <div class="metric-card-desc">Tiempo de respuesta del servidor</div>
+        <div class="metric-card-desc">Server response time</div>
       </div>
     </div>
   </div>
 </div>
 
-<div class="section-title">Resumen Técnico de Diagnóstico</div>
+<div class="section-title">Technical Diagnostic Summary</div>
 <table class="details-table">
   <thead>
     <tr>
-      <th>Métrica / Parámetro</th>
-      <th>Estado actual</th>
-      <th class="text-right">Valor Registrado</th>
+      <th>Metric / Parameter</th>
+      <th>Current status</th>
+      <th class="text-right">Recorded Value</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td><strong>Estado General del Host</strong></td>
-      <td><span style="color: ${h?.status === 'healthy' ? '#16a34a' : h?.status === 'warning' ? '#ca8a04' : '#dc2626'}; font-weight: bold;">${h?.status === 'healthy' ? '✔ Operacional' : h?.status === 'warning' ? '⚠ Advertencia' : '❌ Error'}</span></td>
+      <td><strong>Overall Host Status</strong></td>
+      <td><span style="color: ${h?.status === 'healthy' ? '#16a34a' : h?.status === 'warning' ? '#ca8a04' : '#dc2626'}; font-weight: bold;">${h?.status === 'healthy' ? '✔ Operational' : h?.status === 'warning' ? '⚠ Warning' : '❌ Error'}</span></td>
       <td class="text-right font-mono">${(h?.status ?? 'N/A').toUpperCase()}</td>
     </tr>
     <tr>
-      <td><strong>Tiempo de Respuesta Medio</strong></td>
-      <td><span style="color: ${h?.responseTime != null && h.responseTime < 500 ? '#16a34a' : h?.responseTime != null && h.responseTime < 2000 ? '#ca8a04' : '#dc2626'}; font-weight: bold;">${h?.responseTime != null && h.responseTime < 500 ? '✔ Excelente' : h?.responseTime != null && h.responseTime < 2000 ? '⚠ Moderado' : '❌ Lento'}</span></td>
+      <td><strong>Average Response Time</strong></td>
+      <td><span style="color: ${h?.responseTime != null && h.responseTime < 500 ? '#16a34a' : h?.responseTime != null && h.responseTime < 2000 ? '#ca8a04' : '#dc2626'}; font-weight: bold;">${h?.responseTime != null && h.responseTime < 500 ? '✔ Excellent' : h?.responseTime != null && h.responseTime < 2000 ? '⚠ Moderate' : '❌ Slow'}</span></td>
       <td class="text-right font-mono">${h?.responseTime != null ? `${h.responseTime}ms` : 'N/A'}</td>
     </tr>
     <tr>
       <td><strong>Largest Contentful Paint (LCP)</strong></td>
-      <td><span style="color: ${lcpGood ? '#16a34a' : lcpAvg ? '#ca8a04' : '#dc2626'}; font-weight: bold;">${lcpGood ? '✔ Óptimo' : lcpAvg ? '⚠ Regular' : '❌ Requiere Mejora'}</span></td>
+      <td><span style="color: ${lcpGood ? '#16a34a' : lcpAvg ? '#ca8a04' : '#dc2626'}; font-weight: bold;">${lcpGood ? '✔ Optimal' : lcpAvg ? '⚠ Fair' : '❌ Needs Improvement'}</span></td>
       <td class="text-right font-mono">${p?.lcp != null ? `${p.lcp.toFixed(2)}s` : 'N/A'}</td>
     </tr>
     <tr>
       <td><strong>Cumulative Layout Shift (CLS)</strong></td>
-      <td><span style="color: ${clsGood ? '#16a34a' : clsAvg ? '#ca8a04' : '#dc2626'}; font-weight: bold;">${clsGood ? '✔ Óptimo' : clsAvg ? '⚠ Regular' : '❌ Requiere Mejora'}</span></td>
+      <td><span style="color: ${clsGood ? '#16a34a' : clsAvg ? '#ca8a04' : '#dc2626'}; font-weight: bold;">${clsGood ? '✔ Optimal' : clsAvg ? '⚠ Fair' : '❌ Needs Improvement'}</span></td>
       <td class="text-right font-mono">${p?.cls != null ? p.cls.toFixed(3) : 'N/A'}</td>
     </tr>
     <tr>
       <td><strong>Time to First Byte (TTFB)</strong></td>
-      <td><span style="color: ${ttfbGood ? '#16a34a' : ttfbAvg ? '#ca8a04' : '#dc2626'}; font-weight: bold;">${ttfbGood ? '✔ Óptimo' : ttfbAvg ? '⚠ Regular' : '❌ Requiere Mejora'}</span></td>
+      <td><span style="color: ${ttfbGood ? '#16a34a' : ttfbAvg ? '#ca8a04' : '#dc2626'}; font-weight: bold;">${ttfbGood ? '✔ Optimal' : ttfbAvg ? '⚠ Fair' : '❌ Needs Improvement'}</span></td>
       <td class="text-right font-mono">${p?.ttfb != null ? `${p.ttfb.toFixed(2)}s` : 'N/A'}</td>
     </tr>
     <tr>
-      <td><strong>Cifrado de Seguridad (SSL)</strong></td>
-      <td><span style="color: ${s?.valid ? '#16a34a' : '#dc2626'}; font-weight: bold;">${s?.valid ? '✔ Seguro' : '❌ Inseguro'}</span></td>
-      <td class="text-right font-mono">${s?.valid ? (s.daysRemaining != null ? `${s.daysRemaining} días` : 'Válido') : 'No Válido'}</td>
+      <td><strong>Security Encryption (SSL)</strong></td>
+      <td><span style="color: ${s?.valid ? '#16a34a' : '#dc2626'}; font-weight: bold;">${s?.valid ? '✔ Secure' : '❌ Insecure'}</span></td>
+      <td class="text-right font-mono">${s?.valid ? (s.daysRemaining != null ? `${s.daysRemaining} days` : 'Valid') : 'Invalid'}</td>
     </tr>
   </tbody>
 </table>

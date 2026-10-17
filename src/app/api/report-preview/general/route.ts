@@ -34,7 +34,7 @@ export async function GET() {
   })
 
   const now = new Date()
-  const dateStr = now.toLocaleDateString('es', { year: 'numeric', month: 'long', day: 'numeric' })
+  const dateStr = now.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
 
   const total = sites.length
   const healthy = sites.filter(s => s.healthChecks?.[0]?.status === 'healthy').length
@@ -61,10 +61,10 @@ export async function GET() {
   }).join('\n')
 
   const html = `<!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Dashboard Centralizado - Reporte General</title>
+    <title>Centralized Dashboard - General Report</title>
     <style>
         *, *::before, *::after { box-sizing: border-box; }
         @page {
@@ -72,7 +72,7 @@ export async function GET() {
             margin: 15mm 12mm;
             background-color: #fdfbf7;
             @bottom-right {
-                content: "Página " counter(page);
+                content: "Page " counter(page);
                 font-family: 'Segoe UI', Arial, sans-serif;
                 font-size: 8pt;
                 color: #8c8a82;
@@ -187,19 +187,19 @@ export async function GET() {
     </style>
 </head>
 <body>
-<button class="print-btn" onclick="window.print()">Descargar PDF</button>
+<button class="print-btn" onclick="window.print()">Download PDF</button>
 
 <div class="report-container" style="max-width: 210mm; margin: 0 auto; padding: 15mm 12mm;">
 
     <div class="header-banner" style="margin: -15mm -12mm 20px -12mm; width: calc(100% + 24mm);">
         <div class="header-grid">
             <div class="header-cell">
-                <h1 class="main-title">Dashboard Centralizado</h1>
-                <p class="subtitle">Reporte en vivo de Infraestructura Web</p>
+                <h1 class="main-title">Centralized Dashboard</h1>
+                <p class="subtitle">Live Web Infrastructure Report</p>
             </div>
             <div class="header-cell header-right">
                 <p style="margin: 0; font-size: 10pt; font-weight: bold; color: #ffffff;">${dateStr}</p>
-                <p style="margin: 3px 0 0 0; font-size: 7.5pt; color: #94a3b8;">Sistemas de Monitoreo Local</p>
+                <p style="margin: 3px 0 0 0; font-size: 7.5pt; color: #94a3b8;">Local Monitoring Systems</p>
             </div>
         </div>
     </div>
@@ -207,15 +207,15 @@ export async function GET() {
     <div class="stats-container">
         <div class="stat-box stat-box-total">
             <div class="stat-num">${total}</div>
-            <div class="stat-lbl">Total Sitios</div>
+            <div class="stat-lbl">Total Sites</div>
         </div>
         <div class="stat-box stat-box-healthy">
             <div class="stat-num" style="color: #16a34a;">${healthy}</div>
-            <div class="stat-lbl">Saludables</div>
+            <div class="stat-lbl">Healthy</div>
         </div>
         <div class="stat-box stat-box-warning">
             <div class="stat-num" style="color: #d97706;">${warning}</div>
-            <div class="stat-lbl">Advertencia</div>
+            <div class="stat-lbl">Warning</div>
         </div>
         <div class="stat-box stat-box-error">
             <div class="stat-num" style="color: #dc2626;">${errorCount}</div>
@@ -223,14 +223,14 @@ export async function GET() {
         </div>
     </div>
 
-    <div class="section-title">Desglose General y Métricas Core Web Vitals</div>
+    <div class="section-title">General Breakdown and Core Web Vitals Metrics</div>
     
     <table class="sites-table">
         <thead>
             <tr>
-                <th style="width: 32%;">Sitio / Dominio</th>
-                <th style="width: 15%; text-align: center;">Estado</th>
-                <th style="width: 13%; text-align: center;">Rend.</th>
+                <th style="width: 32%;">Site / Domain</th>
+                <th style="width: 15%; text-align: center;">Status</th>
+                <th style="width: 13%; text-align: center;">Perf.</th>
                 <th style="width: 14%; text-align: center;">LCP</th>
                 <th style="width: 13%; text-align: center;">Acc.</th>
                 <th style="width: 13%; text-align: center;">SEO</th>

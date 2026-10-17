@@ -32,10 +32,10 @@ export default function AlertsPage() {
       <header className="border-b border-zinc-700 px-6 py-4">
         <div className="max-w-4xl mx-auto flex items-center gap-4">
           <Link href="/" className="text-blue-400 hover:underline text-sm">← Dashboard</Link>
-          <h1 className="text-xl font-bold">Alertas</h1>
+          <h1 className="text-xl font-bold">Alerts</h1>
           {alerts.filter(a => a.severity === 'critical').length > 0 && (
             <span className="bg-red-900 text-red-300 px-2 py-0.5 rounded text-xs font-medium">
-              {alerts.filter(a => a.severity === 'critical').length} críticas
+              {alerts.filter(a => a.severity === 'critical').length} critical
             </span>
           )}
         </div>
@@ -43,7 +43,7 @@ export default function AlertsPage() {
 
       <main className="max-w-4xl mx-auto p-6">
         {alerts.length === 0 ? (
-          <p className="text-zinc-500 text-center py-20">No hay alertas registradas</p>
+          <p className="text-zinc-500 text-center py-20">No alerts recorded</p>
         ) : (
           <div className="space-y-2">
             {alerts.map(a => (
@@ -53,7 +53,7 @@ export default function AlertsPage() {
                     <p className="font-medium text-sm">{a.site.name}</p>
                     <p className="text-xs opacity-70">{a.site.url}</p>
                   </div>
-                  <span className="text-xs opacity-60">{new Date(a.createdAt).toLocaleString()}</span>
+                  <span className="text-xs opacity-60">{new Date(a.createdAt).toLocaleString('en-US')}</span>
                 </div>
                 <p className="mt-2 text-sm">{a.message}</p>
               </div>

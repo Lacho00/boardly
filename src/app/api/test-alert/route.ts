@@ -4,13 +4,13 @@ import { prisma } from '@/lib/prisma'
 export async function POST() {
   const config = await prisma.config.findUnique({ where: { id: 'global' } })
   if (!config?.slackWebhook) {
-    return NextResponse.json({ ok: false, error: 'No hay webhook configurado. Ve a /settings primero.' }, { status: 400 })
+    return NextResponse.json({ ok: false, error: 'No webhook configured. Go to /settings first.' }, { status: 400 })
   }
 
   const blocks = [
-    { type: 'header', text: { type: 'plain_text', text: '🧪 Alerta de prueba' } },
-    { type: 'section', text: { type: 'mrkdwn', text: 'Si ves esto, las notificaciones del Dashboard funcionan correctamente.' } },
-    { type: 'context', elements: [{ type: 'mrkdwn', text: `Enviado el ${new Date().toLocaleString()}` }] },
+    { type: 'header', text: { type: 'plain_text', text: '🧪 Test alert' } },
+    { type: 'section', text: { type: 'mrkdwn', text: 'If you see this, Dashboard notifications are working correctly.' } },
+    { type: 'context', elements: [{ type: 'mrkdwn', text: `Sent on ${new Date().toLocaleString('en-US')}` }] },
   ]
 
   try {
@@ -20,9 +20,9 @@ export async function POST() {
       body: JSON.stringify({ blocks }),
     })
     if (!res.ok) {
-      return NextResponse.json({ ok: false, error: `Webhook respondió ${res.status}` }, { status: 500 })
+      return NextResponse.json({ ok: false, error: `Webhook responded with ${res.status}` }, { status: 500 })
     }
-    return NextResponse.json({ ok: true, message: 'Alerta de prueba enviada a Slack' })
+    return NextResponse.json({ ok: true, message: 'Test alert sent to Slack' })
   } catch (e) {
     return NextResponse.json({ ok: false, error: e instanceof Error ? e.message : String(e) }, { status: 500 })
   }

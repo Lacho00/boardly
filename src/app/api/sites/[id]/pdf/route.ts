@@ -30,7 +30,7 @@ export async function GET(
   box(page, 0, H - 80, W, 80, C.hd)
   page.drawText(site.name, { x: M, y: H - 54, size: 22, font: bold, color: clr(C.hf) })
   page.drawText(site.url, { x: M, y: H - 74, size: 9, font: mono, color: clr(C.mt) })
-  page.drawText(new Date().toLocaleDateString('es', { year: 'numeric', month: 'long', day: 'numeric' }), {
+  page.drawText(new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }), {
     x: W - M - 150, y: H - 54, size: 9, font, color: clr(C.mt),
   })
   y = H - 100
@@ -42,16 +42,16 @@ export async function GET(
   const s = site.sslChecks?.[0]
 
   // ── Status bar ──
-  const st = h?.status ?? 'Sin datos'
+  const st = h?.status ?? 'No data'
   const stC = statClr(h?.status)
   box(page, M, y - 10, CW, 32, C.bg)
-  page.drawText('ESTADO', { x: M + 12, y: y - 2, size: 7, font: bold, color: clr(C.mt) })
+  page.drawText('STATUS', { x: M + 12, y: y - 2, size: 7, font: bold, color: clr(C.mt) })
   box(page, M + 12, y - 22, st.length * 7 + 16, 18, stC)
   page.drawText(st.toUpperCase(), { x: M + 20, y: y - 17, size: 8, font: bold, color: clr(C.wh) })
 
   let xOff = M + 150
   const extras: [string, string][] = []
-  if (h?.responseTime != null) extras.push(['T. Respuesta', `${h.responseTime}ms`])
+  if (h?.responseTime != null) extras.push(['Resp. Time', `${h.responseTime}ms`])
   if (h?.wpVersion) extras.push(['WordPress', h.wpVersion])
   extras.forEach(([l, v]) => {
     page.drawText(v, { x: xOff, y: y - 7, size: 10, font: bold, color: clr(C.tx) })
@@ -61,7 +61,7 @@ export async function GET(
   y -= 55
 
   // ── Performance ──
-  secTitle(page, bold, M, y, 'Rendimiento')
+  secTitle(page, bold, M, y, 'Performance')
   y -= 24
 
   const perfCards = [
@@ -82,11 +82,11 @@ export async function GET(
   y -= Math.ceil(perfCards.length / 3) * (ch + 10) + 6
 
   // ── Accessibility & SEO ──
-  secTitle(page, bold, M, y, 'Accesibilidad y SEO')
+  secTitle(page, bold, M, y, 'Accessibility and SEO')
   y -= 24
 
   const hw = (CW - 10) / 2
-  card(page, font, bold, M, y, hw, ch, 'Accesibilidad', a?.score != null ? `${a.score}/100` : '—', scoreClr(a?.score))
+  card(page, font, bold, M, y, hw, ch, 'Accessibility', a?.score != null ? `${a.score}/100` : '—', scoreClr(a?.score))
   card(page, font, bold, M + hw + 10, y, hw, ch, 'SEO', seo?.score != null ? `${seo.score}/100` : '—', scoreClr(seo?.score))
   y -= ch + 16
 
@@ -95,10 +95,10 @@ export async function GET(
   y -= 24
 
   const sslCards = [
-    { label: 'Válido', value: s?.valid ? 'Sí' : 'No', color: s?.valid ? C.gr : C.rd },
+    { label: 'Valid', value: s?.valid ? 'Yes' : 'No', color: s?.valid ? C.gr : C.rd },
   ]
-  if (s?.daysRemaining != null) sslCards.push({ label: 'Días restantes', value: `${s.daysRemaining} días`, color: daysClr(s.daysRemaining) })
-  if (s?.issuer) sslCards.push({ label: 'Emisor', value: s.issuer, color: C.tx })
+  if (s?.daysRemaining != null) sslCards.push({ label: 'Days left', value: `${s.daysRemaining} days`, color: daysClr(s.daysRemaining) })
+  if (s?.issuer) sslCards.push({ label: 'Issuer', value: s.issuer, color: C.tx })
 
   const scw = (CW - (sslCards.length - 1) * 10) / sslCards.length
   sslCards.forEach((c, i) => {
@@ -107,7 +107,7 @@ export async function GET(
 
   // ── Footer ──
   page.drawLine({ start: { x: M, y: 42 }, end: { x: M + CW, y: 42 }, thickness: 0.5, color: clr(C.bd) })
-  page.drawText(`Dashboard Centralizado · Generado el ${new Date().toLocaleString()}`, {
+  page.drawText(`Centralized Dashboard · Generated on ${new Date().toLocaleString('en-US')}`, {
     x: M, y: 28, size: 7, font, color: clr(C.mt),
   })
 
@@ -115,7 +115,7 @@ export async function GET(
   return new NextResponse(pdfBytes, {
     headers: {
       'Content-Type': 'application/pdf',
-      'Content-Disposition': `attachment; filename="${safeFilename(site.name)}-reporte-${new Date().toISOString().slice(0, 10)}.pdf"`,
+      'Content-Disposition': `attachment; filename="${safeFilename(site.name)}-report-${new Date().toISOString().slice(0, 10)}.pdf"`,
     },
   })
 }
