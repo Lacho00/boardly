@@ -21,10 +21,12 @@ export const metadata: Metadata = {
     process.env.NEXT_PUBLIC_SITE_URL ?? "https://boardly-silk.vercel.app",
   ),
   title: "Boardly",
-  description: "Uptime, performance, SSL and SEO monitoring for your websites",
+  description:
+    "Monitor uptime, performance, SSL and SEO for all your websites in one dashboard, with Slack alerts and PDF reports.",
   openGraph: {
     title: "Boardly",
-    description: "Uptime, performance, SSL and SEO monitoring for your websites",
+    description:
+      "Monitor uptime, performance, SSL and SEO for all your websites in one dashboard, with Slack alerts and PDF reports.",
     siteName: "Boardly",
     type: "website",
   },
@@ -53,7 +55,8 @@ export default async function RootLayout({
       <body className="min-h-full flex flex-col">
         {isDemo && (
           <div className="border-b border-line bg-panel px-4 py-2 text-center text-sm text-warn">
-            Public demo with fictional data. Scans, edits and alerts are disabled.
+            Public demo with fictional data. Scans, edits and alerts are
+            disabled.
           </div>
         )}
         {children}
