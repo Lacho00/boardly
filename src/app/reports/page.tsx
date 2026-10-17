@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { readJson, writeOk } from '@/lib/api-client'
+import Link from 'next/link'
 
 type Report = {
   id: string
@@ -51,7 +52,7 @@ export default function ReportsPage() {
       <header className="border-b border-zinc-700 px-6 py-4">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <a href="/" className="text-blue-400 hover:underline text-sm">← Dashboard</a>
+            <Link href="/" className="text-blue-400 hover:underline text-sm">← Dashboard</Link>
             <h1 className="text-xl font-bold">Reportes Mensuales</h1>
           </div>
           <div className="flex gap-2">
