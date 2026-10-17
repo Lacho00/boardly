@@ -8,6 +8,7 @@ import { SiteActions } from '@/components/SiteActions'
 import { LocalLighthouseToggle, WpPasswordForm } from '@/components/SiteSettingsForms'
 import { getSite, getSnapshotHistory } from '@/lib/queries'
 import { parseRange } from '@/lib/range'
+import { lcpTone, scoreTone, sslTone } from '@/lib/scores'
 import { WEB_VITALS, type ChartSeries } from '@/lib/chart'
 
 export const dynamic = 'force-dynamic'
@@ -47,14 +48,14 @@ export default async function SitePage({ params, searchParams }: {
 
       <main className="max-w-6xl mx-auto p-6 grid gap-6">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <StatCard label="Performance" value={p?.score != null ? `${p.score}/100` : '-'} sub={p?.checkedAt ? new Date(p.checkedAt).toLocaleString('en-US') : ''} />
-          <StatCard label="Accessibility" value={a?.score != null ? `${a.score}/100` : '-'} sub={`Best Pract: ${p?.bestPractices ?? '-'}/100`} />
-          <StatCard label="SEO" value={seo?.score != null ? `${seo.score}/100` : '-'} sub="" />
+          <StatCard label="Performance" value={p?.score != null ? `${p.score}/100` : '-'} tone={scoreTone(p?.score)} sub={p?.checkedAt ? new Date(p.checkedAt).toLocaleString('en-US') : ''} />
+          <StatCard label="Accessibility" value={a?.score != null ? `${a.score}/100` : '-'} tone={scoreTone(a?.score)} sub={`Best Pract: ${p?.bestPractices ?? '-'}/100`} />
+          <StatCard label="SEO" value={seo?.score != null ? `${seo.score}/100` : '-'} tone={scoreTone(seo?.score)} sub="" />
           <StatCard label="WP Health" value={h?.status ?? '-'} sub={h?.wpVersion ? `WP ${h.wpVersion}` : h?.responseTime ? `${h.responseTime}ms` : ''} />
-          <StatCard label="LCP" value={p?.lcp != null ? `${p.lcp.toFixed(2)}s` : '-'} sub="Largest Contentful Paint" />
+          <StatCard label="LCP" value={p?.lcp != null ? `${p.lcp.toFixed(2)}s` : '-'} tone={lcpTone(p?.lcp)} sub="Largest Contentful Paint" />
           <StatCard label="CLS" value={p?.cls != null ? p.cls.toFixed(3) : '-'} sub="Cumulative Layout Shift" />
           <StatCard label="TTFB" value={p?.ttfb != null ? `${p.ttfb.toFixed(2)}s` : '-'} sub="Time to First Byte" />
-          <StatCard label="SSL" value={s?.valid ? `${s.daysRemaining ?? '?'} days` : 'Invalid'} sub={s?.issuer ?? ''} />
+          <StatCard label="SSL" value={s?.valid ? `${s.daysRemaining ?? '?'} days` : 'Invalid'} tone={s?.valid ? sslTone(s.daysRemaining) : 'bad'} sub={s?.issuer ?? ''} />
         </div>
 
         <section aria-labelledby="trends-heading" className="grid gap-4">

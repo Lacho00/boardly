@@ -62,7 +62,7 @@ export default function ReportsPage() {
           <div className="flex gap-2">
             <a href="/api/report-preview/general" target="_blank" rel="noopener noreferrer" className="bg-zinc-700 hover:bg-zinc-600 px-3 py-2 rounded text-sm">General PDF</a>
             <button onClick={generate} disabled={generating} className="bg-blue-700 hover:bg-blue-600 px-4 py-2 rounded text-sm disabled:opacity-50">
-              {generating ? 'Generating...' : 'Generate monthly report'}
+              {generating ? 'Generating…' : 'Generate monthly report'}
             </button>
           </div>
         </div>
@@ -78,12 +78,12 @@ export default function ReportsPage() {
               <h2 className="text-lg font-semibold mb-3">{period}</h2>
               <div className="grid gap-3">
                 {items.map(r => (
-                  <div key={r.id} className="bg-zinc-800 rounded-lg p-4 border border-zinc-700 flex items-center justify-between">
-                    <div>
+                  <div key={r.id} className="bg-zinc-800 rounded-lg p-4 border border-zinc-700 flex flex-wrap items-center justify-between gap-3">
+                    <div className="min-w-0">
                       <p className="font-medium">{r.site.name}</p>
                       <p className="text-xs text-zinc-400">{r.site.url}</p>
                     </div>
-                    <div className="flex gap-3 items-center">
+                    <div className="flex flex-wrap gap-3 items-center">
                       <MetricBadge label="Performance" value={r.avgPerformance} />
                       <MetricBadge label="SEO" value={r.avgSeo} />
                       <MetricBadge label="Accessibility" value={r.avgAccessibility} />
