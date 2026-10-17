@@ -215,10 +215,10 @@ function WpPasswordForm({ siteId, currentPassword }: { siteId: string; currentPa
   )
 }
 
-function TrendChart({ title, data, map, color }: {
+function TrendChart<T extends { checkedAt: string }>({ title, data, map, color }: {
   title: string
-  data: { checkedAt: string }[]
-  map: (d: any) => number | null
+  data: T[]
+  map: (d: T) => number | null
   color: string
 }) {
   const values = data.map(d => ({ date: new Date(d.checkedAt).toLocaleDateString(), value: map(d) })).filter(v => v.value != null)

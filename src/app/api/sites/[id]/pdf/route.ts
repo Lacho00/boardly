@@ -30,7 +30,7 @@ export async function GET(
   box(page, 0, H - 80, W, 80, C.hd)
   page.drawText(site.name, { x: M, y: H - 54, size: 22, font: bold, color: clr(C.hf) })
   page.drawText(site.url, { x: M, y: H - 74, size: 9, font: mono, color: clr(C.mt) })
-  page.drawText(new Date().toLocaleDateString('es', { year: 'numeric', month: 'long', day: 'numeric' } as any), {
+  page.drawText(new Date().toLocaleDateString('es', { year: 'numeric', month: 'long', day: 'numeric' }), {
     x: W - M - 150, y: H - 54, size: 9, font, color: clr(C.mt),
   })
   y = H - 100

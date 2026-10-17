@@ -14,15 +14,15 @@ const headers = {
 export async function scrapeSeo(url: string, wpAppPassword?: string | null): Promise<SeoResult> {
   const baseUrl = url.replace(/\/$/, '')
 
-  if (wpAppPassword) {
-    const wpResult = await tryWpApi(baseUrl, wpAppPassword)
-    if (wpResult) return wpResult
-  }
+  // The rendered HTML is the source of truth for what search engines see (title, meta
+  // description, h1 and img counts). The WordPress API only fills in what the HTML lacks.
+  const [html, wp] = await Promise.all([
+    scrapeHtml(baseUrl),
+    tryWpApi(baseUrl, wpAppPassword ?? undefined),
+  ])
 
-  const wpPublic = await tryWpApi(baseUrl)
-  if (wpPublic) return wpPublic
-
-  return scrapeHtml(baseUrl)
+  if (html) return { ...html, description: html.description ?? wp?.description ?? null, title: html.title ?? wp?.title ?? null }
+  return wp ?? { title: null, description: null, h1Count: 0, imgNoAlt: 0 }
 }
 
 async function tryWpApi(baseUrl: string, appPassword?: string): Promise<SeoResult | null> {
@@ -59,9 +59,10 @@ async function tryWpApi(baseUrl: string, appPassword?: string): Promise<SeoResul
   }
 }
 
-async function scrapeHtml(url: string): Promise<SeoResult> {
+async function scrapeHtml(url: string): Promise<SeoResult | null> {
   try {
     const res = await fetch(url, { headers, signal: AbortSignal.timeout(10000) })
+    if (!res.ok) return null
     const html = await res.text()
 
     const title = html.match(/<title[^>]*>([^<]+)<\/title>/i)?.[1]?.trim() ?? null
@@ -80,6 +81,6 @@ async function scrapeHtml(url: string): Promise<SeoResult> {
 
     return { title, description, h1Count, imgNoAlt }
   } catch {
-    return { title: null, description: null, h1Count: 0, imgNoAlt: 0 }
+    return null
   }
 }
