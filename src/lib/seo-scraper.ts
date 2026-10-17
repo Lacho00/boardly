@@ -59,16 +59,29 @@ async function tryWpApi(baseUrl: string, appPassword?: string): Promise<SeoResul
   }
 }
 
+const NAMED_ENTITIES: Record<string, string> = { amp: '&', lt: '<', gt: '>', quot: '"', apos: "'", nbsp: ' ', ndash: '–', mdash: '—', hellip: '…' }
+
+function decodeEntities(text: string | null): string | null {
+  if (text == null) return null
+  return text.replace(/&(#x[0-9a-f]+|#\d+|[a-z]+);/gi, (m, e: string) => {
+    if (e[0] === '#') {
+      const code = e[1].toLowerCase() === 'x' ? parseInt(e.slice(2), 16) : parseInt(e.slice(1), 10)
+      return code > 0 && code <= 0x10ffff ? String.fromCodePoint(code) : m
+    }
+    return NAMED_ENTITIES[e.toLowerCase()] ?? m
+  })
+}
+
 async function scrapeHtml(url: string): Promise<SeoResult | null> {
   try {
     const res = await fetch(url, { headers, signal: AbortSignal.timeout(10000) })
     if (!res.ok) return null
     const html = await res.text()
 
-    const title = html.match(/<title[^>]*>([^<]+)<\/title>/i)?.[1]?.trim() ?? null
+    const title = decodeEntities(html.match(/<title[^>]*>([^<]+)<\/title>/i)?.[1]?.trim() ?? null)
 
     const descMatch = html.match(/<meta[^>]+name=["']description["'][^>]+content=["']([^"']*)["']/i)
-    const description = descMatch?.[1]?.trim() ?? null
+    const description = decodeEntities(descMatch?.[1]?.trim() ?? null)
 
     const h1Matches = html.match(/<h1[^>]*>/gi)
     const h1Count = h1Matches?.length ?? 0
