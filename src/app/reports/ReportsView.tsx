@@ -63,7 +63,7 @@ export function ReportsView({ header }: { header: ReactNode }) {
           </div>
           <div className="flex flex-wrap gap-2">
             <a href="/api/report-preview/general" target="_blank" rel="noopener noreferrer" className="rounded-[3px] border border-line px-3 py-2 text-sm text-dim hover:text-ink whitespace-nowrap">General PDF</a>
-            <button onClick={generate} disabled={generating} className="rounded-[3px] border border-ok px-4 py-2 text-sm text-ok hover:bg-ok/10 whitespace-nowrap disabled:opacity-50">
+            <button onClick={generate} disabled={generating} className="rounded-[3px] border border-ok px-4 py-2 text-sm text-ok enabled:hover:bg-ok/10 whitespace-nowrap disabled:opacity-50">
               {generating ? 'Generating…' : 'Generate monthly report'}
             </button>
           </div>

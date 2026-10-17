@@ -15,7 +15,7 @@ export function AddSiteForm() {
 
   if (!open) {
     return (
-      <button onClick={() => setOpenedFor(state)} className="rounded-[3px] border border-ok px-4 py-2 text-sm text-ok hover:bg-ok/10">
+      <button onClick={() => setOpenedFor(state)} className="rounded-[3px] border border-ok px-4 py-2 text-sm text-ok enabled:hover:bg-ok/10">
         + Add site
       </button>
     )
@@ -25,7 +25,7 @@ export function AddSiteForm() {
     <form action={formAction} className="flex flex-wrap gap-2 items-center">
       <input name="name" aria-label="Site name" autoComplete="off" placeholder="Name" defaultValue={state?.fields?.name} required className="bg-bg border border-line rounded-[3px] px-3 py-1.5 text-sm text-ink placeholder:text-dim focus:border-ok w-40" />
       <input name="url" aria-label="Site URL" autoComplete="off" spellCheck={false} placeholder="https://example.com" defaultValue={state?.fields?.url} required type="url" className="bg-bg border border-line rounded-[3px] px-3 py-1.5 text-sm text-ink placeholder:text-dim focus:border-ok w-60" />
-      <SubmitButton pendingLabel="Saving…" className="rounded-[3px] border border-ok text-ok hover:bg-ok/10 px-3 py-1.5 text-sm">Save</SubmitButton>
+      <SubmitButton pendingLabel="Saving…" className="rounded-[3px] border border-ok text-ok enabled:hover:bg-ok/10 px-3 py-1.5 text-sm">Save</SubmitButton>
       <button type="button" onClick={() => setOpenedFor(undefined)} className="py-1 text-dim hover:text-ink text-sm">Cancel</button>
       {!state?.ok && <ActionMessage state={state} />}
     </form>

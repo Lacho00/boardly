@@ -59,7 +59,7 @@ export function SettingsView({ header }: { header: ReactNode }) {
           </div>
 
           <div className="flex items-center gap-3">
-            <button type="submit" className="rounded-[3px] border border-ok px-4 py-2 text-sm text-ok hover:bg-ok/10">Save</button>
+            <button type="submit" className="rounded-[3px] border border-ok px-4 py-2 text-sm text-ok enabled:hover:bg-ok/10">Save</button>
             {saved && <span role="status" className="text-ok text-sm">✓ Saved</span>}
             <ActionMessage state={error ? { ok: false, message: error } : null} />
           </div>
