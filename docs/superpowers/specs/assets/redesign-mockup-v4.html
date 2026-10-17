@@ -1,0 +1,161 @@
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@500;700&display=swap');
+.bd{--bg:#0e0d0b;--panel:#161512;--line:#2a2823;--ink:#ece8dd;--dim:#8a8578;--ok:#7cffb2;--warn:#ffb020;--crit:#ff5a4f;--bar:#0b0a09;--dot:#1d1b17;--track:#2a2823;--critline:#5a2420;--critglow:#3a1815;--mute:#5d5a50;
+  background:var(--bg);color:var(--ink);font-family:'JetBrains Mono',monospace;font-size:12px;border-radius:10px;border:1px solid var(--line);overflow:hidden;
+  background-image:radial-gradient(circle at 1px 1px,var(--dot) 1px,transparent 0);background-size:14px 14px}
+.bd.light{--bg:#f6f3ec;--panel:#fffdf8;--line:#ddd6c6;--ink:#1c1a15;--dim:#7a7466;--ok:#0f9d58;--warn:#b86e00;--crit:#d6372b;--bar:#ece7da;--dot:#e6dfcf;--track:#e6dfcf;--critline:#e9b4ae;--critglow:#f7dcd8;--mute:#9a9484}
+.bd *{box-sizing:border-box}
+.bd .top{display:flex;justify-content:space-between;align-items:center;padding:9px 18px;border-bottom:1px solid var(--line);background:var(--bar);color:var(--dim);font-size:11px;letter-spacing:.04em}
+.bd .live{color:var(--crit)}.bd .live:before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--crit);margin-right:8px;animation:bp 2s infinite}
+@keyframes bp{50%{opacity:.35}}
+.bd .tg{cursor:pointer;border:1px solid var(--line);color:var(--ink);padding:2px 9px;border-radius:3px;background:var(--panel)}
+.bd .nav{display:flex;justify-content:space-between;align-items:center;padding:14px 18px 4px}
+.bd .logo{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:24px;letter-spacing:-.02em}.bd .logo i{font-style:normal;color:var(--ok)}
+.bd .links{display:flex;gap:16px;color:var(--dim);align-items:center}.bd .links b{color:var(--ink);font-weight:500;border-bottom:1px solid var(--ok);padding-bottom:3px}
+.bd .btn{border:1px solid var(--ok);color:var(--ok);padding:5px 12px;border-radius:3px}
+.bd .wrap{display:grid;grid-template-columns:1fr 270px;gap:14px;padding:12px 18px 18px}
+.bd .sum{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:6px;overflow:hidden;margin-bottom:12px}
+.bd .sum>div{background:var(--panel);padding:10px 14px;display:grid;grid-template-columns:1fr auto;align-items:end;gap:2px 8px}
+.bd small{color:var(--dim);text-transform:uppercase;letter-spacing:.1em;font-size:10px}
+.bd .sum small{grid-column:1/-1}
+.bd .sum strong{font-family:'Space Grotesk',sans-serif;font-size:27px;font-weight:700;line-height:1}
+.bd .sum svg{width:70px;height:26px}
+.bd .site{position:relative;display:grid;grid-template-columns:150px 62px 1fr 190px;gap:16px;align-items:center;margin-bottom:10px;padding:13px 16px 13px 18px;background:var(--panel);border:1px solid var(--line);border-radius:8px}
+.bd .site:before{content:"";position:absolute;left:0;top:10px;bottom:10px;width:3px;border-radius:0 2px 2px 0;background:var(--c)}
+.bd .site.crit{border-color:var(--critline);box-shadow:0 0 0 1px var(--critglow),0 0 28px -8px var(--crit)}
+.bd .name{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:17px;letter-spacing:-.01em}
+.bd .url{color:var(--dim);font-size:11px;margin-top:2px}
+.bd .tag{display:inline-block;margin-top:8px;font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--c);border:1px solid var(--c);padding:1px 7px;border-radius:2px}
+.bd .ring{width:60px;height:60px;border-radius:50%;background:conic-gradient(var(--c) var(--p),var(--track) 0);display:grid;place-items:center}
+.bd .ring i{width:48px;height:48px;border-radius:50%;background:var(--panel);display:grid;place-items:center;font-style:normal;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:18px;color:var(--c)}
+.bd .mets{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-bottom:9px}
+.bd .mets b{display:block;font-weight:500;font-size:16px}
+.bd .pulse{display:flex;gap:2px;height:22px;align-items:stretch}
+.bd .pulse b{flex:1;background:var(--ok);opacity:.45;border-radius:1px}.bd .pulse b.w{background:var(--warn);opacity:1}.bd .pulse b.r{background:var(--crit);opacity:1;box-shadow:0 0 6px -1px var(--crit)}
+.bd .ax{display:flex;justify-content:space-between;color:var(--mute);font-size:9px;margin-top:3px;letter-spacing:.08em}
+.bd .rt small{display:flex;justify-content:space-between}
+.bd .rt strong{font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:700;color:var(--c)}
+.bd .rt svg{width:100%;height:36px;display:block;margin:4px 0 8px}
+.bd .ssl{height:4px;background:var(--track);border-radius:2px;overflow:hidden}.bd .ssl s{display:block;height:100%;background:var(--c)}
+.bd .ssl-l{display:flex;justify-content:space-between;margin-top:4px;color:var(--dim);font-size:10px}
+.bd .side>div{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:12px 14px;margin-bottom:10px}
+.bd .side h5{margin:0 0 8px;font-weight:500;color:var(--dim);text-transform:uppercase;letter-spacing:.12em;font-size:10px;display:flex;justify-content:space-between}
+.bd .log p{margin:0;padding:6px 0;border-bottom:1px dashed var(--line);color:var(--dim);font-size:11px;line-height:1.35}
+.bd .log p:last-child{border:0}.bd .log p span{color:var(--mute);margin-right:6px}.bd .log em{font-style:normal}
+.bd .cal div{display:flex;justify-content:space-between;align-items:center;padding:5px 0;font-size:11px}
+.bd .cal i{font-style:normal;font-weight:700}
+.bd .bars .t{position:relative}.bd .bars .t:after{content:"";position:absolute;left:calc(62px + 8px + (100% - 62px - 30px - 16px)*.42);top:0;bottom:0;border-left:1px dashed var(--ink);opacity:.5}
+.bd .bars div{display:grid;grid-template-columns:62px 1fr 30px;gap:8px;align-items:center;padding:4px 0;font-size:11px;color:var(--dim)}
+.bd .bars s{display:block;height:6px;background:var(--c);border-radius:1px;text-decoration:none}
+.ok{--c:var(--ok)}.warn{--c:var(--warn)}.crit{--c:var(--crit)}
+</style>
+
+<h2>Versión 4 · pulida</h2>
+<p class="subtitle">Cambios sobre la v3: estado de cabecera coherente, gráficas de respuesta con escala real desde cero, incidentes que destacan sobre el verde, columna lateral completa con marcador de objetivo, pie de estado y cifras más grandes. Botón «tema» para alternar claro/oscuro.</p>
+
+<div class="bd" id="bd">
+  <div class="top"><span class="live">1 SITIO CRÍTICO · 1 AVISO · 2 SALUDABLES</span><span>ÚLTIMO CHEQUEO 14:02:11 · SIGUIENTE EN 04:12 &nbsp; <span class="tg" onclick="document.getElementById('bd').classList.toggle('light')">◐ tema</span></span></div>
+  <div class="nav">
+    <div class="logo">boardly<i>_</i></div>
+    <div class="links"><b>Sitios</b><span>Alertas <span style="color:var(--crit)">1</span></span><span>Informes</span><span>Ajustes</span><span class="btn">+ Añadir sitio</span></div>
+  </div>
+
+  <div class="wrap">
+    <div>
+      <div class="sum">
+        <div><small>Uptime 30 d</small><strong>99.82%</strong><svg data-spark="3,4,4,5,4,6,6,7,7,8" stroke="var(--ok)"></svg></div>
+        <div><small>Rendimiento medio</small><strong>76</strong><svg data-spark="8,7,7,6,6,5,6,5,4,5" stroke="var(--warn)"></svg></div>
+        <div><small>LCP mediano</small><strong>2.6s</strong><svg data-spark="3,3,4,5,4,5,6,5,6,6" stroke="var(--warn)"></svg></div>
+        <div><small>Próximo SSL</small><strong style="color:var(--crit)">3 d</strong><svg data-spark="9,8,7,6,5,4,3,2,2,1" stroke="var(--crit)"></svg></div>
+      </div>
+
+      <div class="site crit">
+        <div><div class="name">Globex</div><div class="url">globex.net</div><span class="tag">Crítico</span></div>
+        <div class="ring" style="--p:48%"><i>48</i></div>
+        <div>
+          <div class="mets"><div><small>Perf</small><b style="color:var(--crit)">48</b></div><div><small>A11y</small><b style="color:var(--warn)">74</b></div><div><small>Prácticas</small><b>83</b></div><div><small>SEO</small><b>90</b></div><div><small>LCP</small><b style="color:var(--crit)">5.9s</b></div><div><small>Uptime</small><b style="color:var(--crit)">97.1%</b></div></div>
+          <div class="pulse" data-pulse="gggwgggrrgwgggrggwggggrrrgggggwgggggrggrrgggggg"></div>
+          <div class="ax"><span>−24 h</span><span>−12 h</span><span>ahora</span></div>
+        </div>
+        <div class="rt"><small>Respuesta <strong>2.1s</strong></small><svg data-spark="400,420,500,450,900,1800,2400,1500,1100,2300,2500,2100" stroke="var(--crit)" fill="1"></svg><div class="ssl"><s style="width:4%"></s></div><div class="ssl-l"><span>SSL</span><span style="color:var(--crit)">3 días</span></div></div>
+      </div>
+
+      <div class="site warn">
+        <div><div class="name">Northwind</div><div class="url">northwind.io</div><span class="tag">Aviso</span></div>
+        <div class="ring" style="--p:71%"><i>71</i></div>
+        <div>
+          <div class="mets"><div><small>Perf</small><b style="color:var(--warn)">71</b></div><div><small>A11y</small><b>92</b></div><div><small>Prácticas</small><b>88</b></div><div><small>SEO</small><b>95</b></div><div><small>LCP</small><b style="color:var(--warn)">3.4s</b></div><div><small>Uptime</small><b>99.7%</b></div></div>
+          <div class="pulse" data-pulse="ggggwgggggggwggggggggwgggggggggggwggggggggggggg"></div>
+          <div class="ax"><span>−24 h</span><span>−12 h</span><span>ahora</span></div>
+        </div>
+        <div class="rt"><small>Respuesta <strong>640ms</strong></small><svg data-spark="380,390,420,400,450,520,480,560,640,600,650,640" stroke="var(--warn)" fill="1"></svg><div class="ssl"><s style="width:18%"></s></div><div class="ssl-l"><span>SSL</span><span style="color:var(--warn)">14 días</span></div></div>
+      </div>
+
+      <div class="site ok">
+        <div><div class="name">Acme</div><div class="url">acme.com</div><span class="tag">Saludable</span></div>
+        <div class="ring" style="--p:96%"><i>96</i></div>
+        <div>
+          <div class="mets"><div><small>Perf</small><b>96</b></div><div><small>A11y</small><b>98</b></div><div><small>Prácticas</small><b>100</b></div><div><small>SEO</small><b>100</b></div><div><small>LCP</small><b>1.2s</b></div><div><small>Uptime</small><b>100%</b></div></div>
+          <div class="pulse" data-pulse="gggggggggggggggggggggggggggggggggggggggggggggggg"></div>
+          <div class="ax"><span>−24 h</span><span>−12 h</span><span>ahora</span></div>
+        </div>
+        <div class="rt"><small>Respuesta <strong>180ms</strong></small><svg data-spark="180,172,185,178,170,182,176,181,179,172,184,180" stroke="var(--ok)" fill="1"></svg><div class="ssl"><s style="width:70%"></s></div><div class="ssl-l"><span>SSL</span><span>62 días</span></div></div>
+      </div>
+
+      <div class="site ok">
+        <div><div class="name">Initech</div><div class="url">initech.dev</div><span class="tag">Saludable</span></div>
+        <div class="ring" style="--p:91%"><i>91</i></div>
+        <div>
+          <div class="mets"><div><small>Perf</small><b>91</b></div><div><small>A11y</small><b>96</b></div><div><small>Prácticas</small><b>92</b></div><div><small>SEO</small><b>98</b></div><div><small>LCP</small><b>1.8s</b></div><div><small>Uptime</small><b>99.98%</b></div></div>
+          <div class="pulse" data-pulse="gggggggggggggggggggggggggwgggggggggggggggggggggg"></div>
+          <div class="ax"><span>−24 h</span><span>−12 h</span><span>ahora</span></div>
+        </div>
+        <div class="rt"><small>Respuesta <strong>210ms</strong></small><svg data-spark="205,212,220,208,210,215,207,214,209,211,218,210" stroke="var(--ok)" fill="1"></svg><div class="ssl"><s style="width:95%"></s></div><div class="ssl-l"><span>SSL</span><span>88 días</span></div></div>
+      </div>
+    </div>
+
+    <div class="side">
+      <div class="log"><h5><span>Actividad</span><span>en vivo</span></h5>
+        <p><span>14:02</span><em style="color:var(--crit)">Globex</em> respuesta 2.1s, umbral 1.0s</p>
+        <p><span>13:47</span><em style="color:var(--crit)">Globex</em> caída 6 min, recuperado</p>
+        <p><span>13:30</span><em style="color:var(--warn)">Northwind</em> LCP sube a 3.4s</p>
+        <p><span>12:15</span><em style="color:var(--ok)">Acme</em> auditoría Lighthouse: 96</p>
+        <p><span>09:00</span>Informe semanal generado</p>
+      </div>
+      <div class="cal"><h5><span>Vencimientos SSL</span><span>próx.</span></h5>
+        <div><span>globex.net</span><i style="color:var(--crit)">3 d</i></div>
+        <div><span>northwind.io</span><i style="color:var(--warn)">14 d</i></div>
+        <div><span>acme.com</span><i>62 d</i></div>
+        <div><span>initech.dev</span><i>88 d</i></div>
+      </div>
+
+      <div class="log"><h5><span>Próximos chequeos</span><span>cron</span></h5>
+        <p><span>14:06</span>Salud · 4 sitios</p>
+        <p><span>14:30</span>PageSpeed · Globex</p>
+        <p><span>18:00</span>Lighthouse · 4 sitios</p>
+        <p><span>00:00</span>SSL y SEO · 4 sitios</p>
+      </div>
+      <div class="bars"><h5><span>LCP por sitio</span><span>┆ objetivo 2.5s</span></h5><div class="t" style="display:block;padding:0">
+        <div class="crit"><span>Globex</span><s style="width:100%"></s><span>5.9</span></div>
+        <div class="warn"><span>Northwind</span><s style="width:58%"></s><span>3.4</span></div>
+        <div class="ok"><span>Initech</span><s style="width:31%"></s><span>1.8</span></div>
+        <div class="ok"><span>Acme</span><s style="width:20%"></s><span>1.2</span></div>
+      </div></div>
+    </div>
+  </div>
+  <div class="top" style="border-top:1px solid var(--line);border-bottom:0"><span>boardly · 4 sitios · 1 crítico</span><span>datos ficticios · cron cada 5 min</span></div>
+</div>
+
+<script>
+document.querySelectorAll('[data-pulse]').forEach(function(el){
+  el.dataset.pulse.split('').forEach(function(c){var b=document.createElement('b');if(c==='w')b.className='w';if(c==='r')b.className='r';el.appendChild(b)})
+});
+document.querySelectorAll('svg[data-spark]').forEach(function(s){
+  var v=s.dataset.spark.split(',').map(Number),w=100,h=30,mx=Math.max.apply(null,v),mn=s.getAttribute('fill')?0:Math.min.apply(null,v),r=((s.getAttribute('fill')?mx*1.15:mx)-mn)||1;
+  var pts=v.map(function(y,i){return (i*w/(v.length-1)).toFixed(1)+','+(h-3-((y-mn)/r)*(h-6)).toFixed(1)});
+  s.setAttribute('viewBox','0 0 '+w+' '+h);s.setAttribute('preserveAspectRatio','none');
+  var col=s.getAttribute('stroke');
+  s.innerHTML=(s.getAttribute('fill')?'<polygon points="0,'+h+' '+pts.join(' ')+' '+w+','+h+'" fill="'+col+'" opacity=".12"/>':'')+'<polyline points="'+pts.join(' ')+'" fill="none" stroke="'+col+'" stroke-width="1.6" vector-effect="non-scaling-stroke"/>';
+  s.removeAttribute('fill');
+});
+</script>
