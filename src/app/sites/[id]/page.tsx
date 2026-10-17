@@ -35,12 +35,12 @@ export default async function SitePage({ params, searchParams }: {
   return (
     <div className="min-h-screen bg-zinc-900 text-zinc-100">
       <header className="border-b border-zinc-700 px-6 py-4">
-        <div className="max-w-6xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <Link href="/" className="text-blue-400 hover:underline text-sm"><span aria-hidden="true">←</span> Back</Link>
+        <div className="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-x-4 gap-y-3">
+          <div className="flex items-center gap-4 min-w-0">
+            <Link href="/" className="text-blue-400 hover:underline text-sm py-2"><span aria-hidden="true">←</span> Back</Link>
             <h1 className="text-xl font-bold">{site.name}</h1>
           </div>
-          <div className="flex gap-3 items-center">
+          <div className="flex flex-wrap gap-3 items-center">
             <SiteActions siteId={site.id} />
           </div>
         </div>

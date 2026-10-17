@@ -13,16 +13,16 @@ export function SiteActions({ siteId }: { siteId: string }) {
 
   return (
     <>
-      <a href={`/api/report-preview/${siteId}`} target="_blank" rel="noopener noreferrer" className="bg-zinc-700 hover:bg-zinc-600 px-3 py-2 rounded text-sm">PDF</a>
+      <a href={`/api/report-preview/${siteId}`} target="_blank" rel="noopener noreferrer" className="bg-zinc-700 hover:bg-zinc-600 px-3 py-2 rounded text-sm whitespace-nowrap">PDF</a>
       <form action={collect}>
-        <SubmitButton pendingLabel="Collecting…" className="bg-blue-700 hover:bg-blue-600 px-4 py-2 rounded text-sm">Collect now</SubmitButton>
+        <SubmitButton pendingLabel="Collecting…" className="bg-blue-700 hover:bg-blue-600 px-4 py-2 rounded text-sm whitespace-nowrap">Collect now</SubmitButton>
       </form>
       <ActionMessage state={collectState} />
       <form
         action={remove}
         onSubmit={e => { if (!confirm('Delete this site and all its data?')) e.preventDefault() }}
       >
-        <SubmitButton pendingLabel="Deleting…" className="bg-red-800 hover:bg-red-700 px-4 py-2 rounded text-sm">Delete</SubmitButton>
+        <SubmitButton pendingLabel="Deleting…" className="bg-red-800 hover:bg-red-700 px-4 py-2 rounded text-sm whitespace-nowrap">Delete</SubmitButton>
       </form>
       <ActionMessage state={deleteState} />
     </>
