@@ -36,7 +36,7 @@ export default function AlertsPage() {
     <div className="min-h-screen bg-zinc-900 text-zinc-100">
       <header className="border-b border-zinc-700 px-6 py-4">
         <div className="max-w-4xl mx-auto flex items-center gap-4">
-          <Link href="/" className="text-blue-400 hover:underline text-sm"><span aria-hidden="true">←</span> Dashboard</Link>
+          <Link href="/" className="text-blue-400 hover:underline text-sm py-2"><span aria-hidden="true">←</span> Dashboard</Link>
           <h1 className="text-xl font-bold">Alerts</h1>
           {alerts.filter(a => a.severity === 'critical').length > 0 && (
             <span className="bg-red-900 text-red-300 px-2 py-0.5 rounded text-xs font-medium">

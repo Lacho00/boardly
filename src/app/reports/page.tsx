@@ -54,14 +54,14 @@ export default function ReportsPage() {
   return (
     <div className="min-h-screen bg-zinc-900 text-zinc-100">
       <header className="border-b border-zinc-700 px-6 py-4">
-        <div className="max-w-6xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <Link href="/" className="text-blue-400 hover:underline text-sm"><span aria-hidden="true">←</span> Dashboard</Link>
+        <div className="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-x-4 gap-y-3">
+          <div className="flex items-center gap-4 min-w-0">
+            <Link href="/" className="text-blue-400 hover:underline text-sm py-2"><span aria-hidden="true">←</span> Dashboard</Link>
             <h1 className="text-xl font-bold">Monthly Reports</h1>
           </div>
-          <div className="flex gap-2">
-            <a href="/api/report-preview/general" target="_blank" rel="noopener noreferrer" className="bg-zinc-700 hover:bg-zinc-600 px-3 py-2 rounded text-sm">General PDF</a>
-            <button onClick={generate} disabled={generating} className="bg-blue-700 hover:bg-blue-600 px-4 py-2 rounded text-sm disabled:opacity-50">
+          <div className="flex flex-wrap gap-2">
+            <a href="/api/report-preview/general" target="_blank" rel="noopener noreferrer" className="bg-zinc-700 hover:bg-zinc-600 px-3 py-2 rounded text-sm whitespace-nowrap">General PDF</a>
+            <button onClick={generate} disabled={generating} className="bg-blue-700 hover:bg-blue-600 px-4 py-2 rounded text-sm whitespace-nowrap disabled:opacity-50">
               {generating ? 'Generating…' : 'Generate monthly report'}
             </button>
           </div>
@@ -90,7 +90,7 @@ export default function ReportsPage() {
                       <MetricBadge label="Uptime" value={r.uptime} isUptime />
                       <a
                         href={`/api/report-preview/${r.siteId}`}
-                        className="bg-zinc-700 hover:bg-zinc-600 px-2 py-1 rounded text-xs ml-2"
+                        className="bg-zinc-700 hover:bg-zinc-600 px-3 py-2 rounded text-xs ml-2"
                         target="_blank"
                       >
                         PDF
@@ -117,13 +117,15 @@ function MetricBadge({ label, value, isUptime }: { label: string; value: number 
     )
   }
 
+  // Colour by the value as displayed, so 99.98 (shown as 100.0%) is not yellow.
+  const shown = Number(value.toFixed(isUptime ? 1 : 0))
   const color = isUptime
-    ? value >= 100 ? 'text-green-400' : value >= 99.5 ? 'text-yellow-400' : 'text-red-400'
+    ? shown >= 100 ? 'text-green-400' : shown >= 99.5 ? 'text-yellow-400' : 'text-red-400'
     : value >= 80 ? 'text-green-400' : value >= 50 ? 'text-yellow-400' : 'text-red-400'
 
   return (
     <div className="flex flex-col items-center min-w-[60px] bg-zinc-750 rounded-lg px-3 py-1.5 border border-zinc-700">
-      <span className={`text-sm font-bold ${color}`}>{value.toFixed(isUptime ? 1 : 0)}%</span>
+      <span className={`text-sm font-bold ${color}`}>{shown.toFixed(isUptime ? 1 : 0)}%</span>
       <span className="text-xs text-zinc-400 mt-0.5">{label}</span>
     </div>
   )
