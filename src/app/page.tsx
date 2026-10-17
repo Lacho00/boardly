@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { RefreshButton } from '@/components/RefreshButton'
 import { AddSiteForm } from '@/components/AddSiteForm'
 import { getCriticalAlertCount, getSites } from '@/lib/queries'
+import { lcpTone, responseTone, scoreTone, sslTone, toneClass, type Tone } from '@/lib/scores'
 import type { SiteSummaryData } from '@/lib/types'
 
 export const dynamic = 'force-dynamic'
@@ -12,9 +13,9 @@ export default async function Home() {
   return (
     <div className="min-h-screen bg-zinc-900 text-zinc-100">
       <header className="border-b border-zinc-700 px-6 py-4">
-        <div className="max-w-6xl mx-auto flex items-center justify-between">
+        <div className="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-y-3">
           <h1 className="text-xl font-bold">Central Dashboard</h1>
-          <div className="flex gap-3 items-center">
+          <div className="flex flex-wrap gap-3 items-center">
             <Link href="/alerts" className="text-xs relative">
               {alerts > 0
                 ? <span className="text-red-400 font-bold"><span aria-hidden="true">🔔</span> {alerts} {alerts === 1 ? 'alert' : 'alerts'}</span>
@@ -49,7 +50,7 @@ function SiteCard({ site }: { site: SiteSummaryData }) {
   const s = site.sslChecks?.[0]
 
   return (
-    <Link href={`/sites/${site.id}`} className="block bg-zinc-800 rounded-lg p-5 border border-zinc-700 hover:border-zinc-500 transition-colors">
+    <Link href={`/sites/${site.id}`} className="block bg-zinc-800 rounded-lg p-5 border border-zinc-700 hover:border-zinc-500 hover:bg-zinc-750 transition-colors">
       <div className="flex items-center justify-between mb-3">
         <div>
           <h2 className="text-lg font-semibold">{site.name}</h2>
@@ -67,22 +68,22 @@ function SiteCard({ site }: { site: SiteSummaryData }) {
       </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-4 text-sm">
-        <Metric label="Performance" value={p?.score != null ? `${p.score}/100` : '-'} />
-        <Metric label="Best Practices" value={p?.bestPractices != null ? `${p.bestPractices}/100` : '-'} />
-        <Metric label="Accessibility" value={a?.score != null ? `${a.score}/100` : '-'} />
-        <Metric label="LCP" value={p?.lcp != null ? `${p.lcp.toFixed(1)}s` : '-'} />
-        <Metric label="Response time" value={h?.responseTime != null ? `${h.responseTime}ms` : '-'} />
-        <Metric label="SSL" value={s?.daysRemaining != null ? `${s.daysRemaining}d` : '-'} />
+        <Metric label="Performance" value={p?.score != null ? `${p.score}/100` : '-'} tone={scoreTone(p?.score)} />
+        <Metric label="Best Practices" value={p?.bestPractices != null ? `${p.bestPractices}/100` : '-'} tone={scoreTone(p?.bestPractices)} />
+        <Metric label="Accessibility" value={a?.score != null ? `${a.score}/100` : '-'} tone={scoreTone(a?.score)} />
+        <Metric label="LCP" value={p?.lcp != null ? `${p.lcp.toFixed(1)}s` : '-'} tone={lcpTone(p?.lcp)} />
+        <Metric label="Response time" value={h?.responseTime != null ? `${h.responseTime}ms` : '-'} tone={responseTone(h?.responseTime)} />
+        <Metric label="SSL" value={s?.daysRemaining != null ? `${s.daysRemaining}d` : '-'} tone={sslTone(s?.daysRemaining)} />
       </div>
     </Link>
   )
 }
 
-function Metric({ label, value }: { label: string; value: string }) {
+function Metric({ label, value, tone = 'none' }: { label: string; value: string; tone?: Tone }) {
   return (
     <div>
       <p className="text-zinc-400 text-xs">{label}</p>
-      <p className="font-medium">{value}</p>
+      <p className={`text-base font-semibold tabular-nums ${toneClass[tone]}`}>{value}</p>
     </div>
   )
 }

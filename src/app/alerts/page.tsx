@@ -16,9 +16,14 @@ type AlertItem = {
 
 export default function AlertsPage() {
   const [alerts, setAlerts] = useState<AlertItem[]>([])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    fetch('/api/alerts').then(r => readJson<AlertItem[]>(r)).then(d => setAlerts(Array.isArray(d) ? d : [])).catch(() => setAlerts([]))
+    fetch('/api/alerts')
+      .then(r => readJson<AlertItem[]>(r))
+      .then(d => setAlerts(Array.isArray(d) ? d : []))
+      .catch(() => setAlerts([]))
+      .finally(() => setLoading(false))
   }, [])
 
   const severityColor: Record<string, string> = {
@@ -42,7 +47,9 @@ export default function AlertsPage() {
       </header>
 
       <main className="max-w-4xl mx-auto p-6">
-        {alerts.length === 0 ? (
+        {loading ? (
+          <p className="text-zinc-400 text-center py-20" role="status">Loading…</p>
+        ) : alerts.length === 0 ? (
           <p className="text-zinc-400 text-center py-20">No alerts recorded</p>
         ) : (
           <div className="space-y-2">

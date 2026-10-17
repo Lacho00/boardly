@@ -49,7 +49,7 @@ export default function SettingsPage() {
               spellCheck={false}
               value={webhook}
               onChange={e => setWebhook(e.target.value)}
-              placeholder="https://hooks.slack.com/services/..."
+              placeholder="https://hooks.slack.com/services/…"
               className="w-full bg-zinc-700 border border-zinc-600 rounded px-3 py-2 text-sm"
             />
             <p className="text-xs text-zinc-400 mt-1">
