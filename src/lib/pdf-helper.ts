@@ -74,8 +74,20 @@ export function card(page: PDFPage, font: PDFFont, bold: PDFFont, x: number, y: 
   label(page, font, x + 10, y - 10, labelText)
 }
 
+// Standard Helvetica only encodes Latin-1 here; replace anything else so drawText does not throw.
+export function pdfSafe(text: string): string {
+  return text.replace(/[^\u0020-\u007E\u00A0-\u00FF]/g, '?')
+}
+
 export async function createDoc() {
   const doc = await PDFDocument.create()
+  const addPage = doc.addPage.bind(doc)
+  doc.addPage = ((...args: Parameters<typeof addPage>) => {
+    const page = addPage(...args)
+    const drawText = page.drawText.bind(page)
+    page.drawText = (text, options) => drawText(pdfSafe(text), options)
+    return page
+  }) as typeof doc.addPage
   const font = await doc.embedFont(StandardFonts.Helvetica)
   const bold = await doc.embedFont(StandardFonts.HelveticaBold)
   return { doc, font, bold }

@@ -23,7 +23,7 @@ export async function POST() {
       return NextResponse.json({ ok: false, error: `Webhook respondió ${res.status}` }, { status: 500 })
     }
     return NextResponse.json({ ok: true, message: 'Alerta de prueba enviada a Slack' })
-  } catch (e: any) {
-    return NextResponse.json({ ok: false, error: e.message }, { status: 500 })
+  } catch (e) {
+    return NextResponse.json({ ok: false, error: e instanceof Error ? e.message : String(e) }, { status: 500 })
   }
 }

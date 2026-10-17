@@ -1,13 +1,12 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
 import { readJson, writeOk } from '@/lib/api-client'
+import Link from 'next/link'
 
 export default function SettingsPage() {
   const [webhook, setWebhook] = useState('')
   const [saved, setSaved] = useState(false)
-  const router = useRouter()
 
   useEffect(() => {
     fetch('/api/config').then(r => readJson<{ slackWebhook?: string }>(r)).then(d => setWebhook(d?.slackWebhook ?? ''))
@@ -29,7 +28,7 @@ export default function SettingsPage() {
     <div className="min-h-screen bg-zinc-900 text-zinc-100">
       <header className="border-b border-zinc-700 px-6 py-4">
         <div className="max-w-3xl mx-auto flex items-center gap-4">
-          <a href="/" className="text-blue-400 hover:underline text-sm">← Dashboard</a>
+          <Link href="/" className="text-blue-400 hover:underline text-sm">← Dashboard</Link>
           <h1 className="text-xl font-bold">Configuración</h1>
         </div>
       </header>
