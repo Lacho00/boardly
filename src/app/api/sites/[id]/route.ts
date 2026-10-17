@@ -3,14 +3,7 @@ import type { Prisma } from '@prisma/client'
 import { prisma } from '@/lib/prisma'
 import { isPrismaNotFound, isPrismaUniqueViolation, parseHttpUrl } from '@/lib/security'
 import { toPublicSite } from '@/lib/site-public'
-
-const siteInclude = {
-  healthChecks: { orderBy: { checkedAt: 'desc' as const }, take: 30 },
-  performanceSnapshots: { orderBy: { checkedAt: 'desc' as const }, take: 30 },
-  seoAudits: { orderBy: { checkedAt: 'desc' as const }, take: 30 },
-  accessibilityScores: { orderBy: { checkedAt: 'desc' as const }, take: 30 },
-  sslChecks: { orderBy: { checkedAt: 'desc' as const }, take: 10 },
-}
+import { siteDetailInclude } from '@/lib/types'
 
 export async function GET(
   _req: NextRequest,
@@ -19,7 +12,7 @@ export async function GET(
   const { id } = await params
   const site = await prisma.site.findUnique({
     where: { id },
-    include: siteInclude,
+    include: siteDetailInclude,
   })
   if (!site) return NextResponse.json({ error: 'Not found' }, { status: 404 })
   return NextResponse.json(toPublicSite(site))

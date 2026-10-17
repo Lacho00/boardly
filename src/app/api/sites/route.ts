@@ -2,19 +2,12 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { isPrismaUniqueViolation, parseHttpUrl } from '@/lib/security'
 import { toPublicSite } from '@/lib/site-public'
-
-const siteInclude = {
-  healthChecks: { orderBy: { checkedAt: 'desc' as const }, take: 1 },
-  performanceSnapshots: { orderBy: { checkedAt: 'desc' as const }, take: 1 },
-  seoAudits: { orderBy: { checkedAt: 'desc' as const }, take: 1 },
-  accessibilityScores: { orderBy: { checkedAt: 'desc' as const }, take: 1 },
-  sslChecks: { orderBy: { checkedAt: 'desc' as const }, take: 1 },
-}
+import { siteListInclude } from '@/lib/types'
 
 export async function GET() {
   const sites = await prisma.site.findMany({
     orderBy: { createdAt: 'desc' },
-    include: siteInclude,
+    include: siteListInclude,
   })
   return NextResponse.json(sites.map(toPublicSite))
 }
