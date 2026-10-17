@@ -18,13 +18,13 @@ export const severityLabel: Record<Severity, string> = {
   unknown: 'No data',
 }
 
-export default function SeverityTag({ severity }: { severity: Severity }) {
+export default function SeverityTag({ severity, label }: { severity: Severity; label?: string }) {
   const c = severityClass[severity]
   return (
     <span
       className={`inline-block rounded-[2px] border px-[7px] py-px text-[10px] uppercase tracking-[0.1em] ${c.text} ${c.border}`}
     >
-      {severityLabel[severity]}
+      {label ?? severityLabel[severity]}
     </span>
   )
 }

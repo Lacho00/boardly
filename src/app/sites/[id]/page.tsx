@@ -74,9 +74,9 @@ export default async function SitePage({ params, searchParams }: {
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <TrendChart title="Performance Score" data={history} map={d => d.score} color="var(--ok)" />
-            <LineChart title="LCP" unit="s" series={[vital('lcp', 'LCP', 'var(--t-blue-400)', d => d.lcp)]} thresholds={WEB_VITALS.lcp} />
+            <LineChart title="LCP" unit="s" series={[vital('lcp', 'LCP', 'var(--series-a)', d => d.lcp)]} thresholds={WEB_VITALS.lcp} />
             <LineChart title="CLS" decimals={3} series={[vital('cls', 'CLS', 'var(--ink)', d => d.cls)]} thresholds={WEB_VITALS.cls} />
-            <LineChart title="TTFB" unit="s" series={[vital('ttfb', 'TTFB', 'var(--t-blue-300)', d => d.ttfb)]} thresholds={WEB_VITALS.ttfb} />
+            <LineChart title="TTFB" unit="s" series={[vital('ttfb', 'TTFB', 'var(--series-b)', d => d.ttfb)]} thresholds={WEB_VITALS.ttfb} />
           </div>
         </section>
 

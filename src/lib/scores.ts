@@ -1,4 +1,4 @@
-// Text colour for a metric, using the same green / yellow / red bands as the reports.
+// Text colour for a metric. scoreTone bands (90/50) drive the home page; the reports page applies its own 80/50 bands.
 export type Tone = 'good' | 'warn' | 'bad' | 'none'
 
 export const toneClass: Record<Tone, string> = {
