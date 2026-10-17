@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { escapeHtml } from '@/lib/security'
 
 function scoreClass(sc?: number | null) {
   if (sc == null) return 'score-poor'
@@ -46,7 +47,7 @@ export async function GET(
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Reporte - ${site.name}</title>
+<title>Reporte - ${escapeHtml(site.name)}</title>
 <style>
 *, *::before, *::after { box-sizing: border-box; }
 @page {
@@ -156,8 +157,8 @@ body {
 <div class="header-banner">
   <div class="header-grid">
     <div class="header-cell">
-      <h1 class="project-title">${site.name}</h1>
-      <p class="project-url">${site.url}</p>
+      <h1 class="project-title">${escapeHtml(site.name)}</h1>
+      <p class="project-url">${escapeHtml(site.url)}</p>
     </div>
     <div class="header-cell header-right">
       <p class="meta-date">${dateStr}</p>
