@@ -1,13 +1,11 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
 import { readJson, writeOk } from '@/lib/api-client'
 
 export default function SettingsPage() {
   const [webhook, setWebhook] = useState('')
   const [saved, setSaved] = useState(false)
-  const router = useRouter()
 
   useEffect(() => {
     fetch('/api/config').then(r => readJson<{ slackWebhook?: string }>(r)).then(d => setWebhook(d?.slackWebhook ?? ''))

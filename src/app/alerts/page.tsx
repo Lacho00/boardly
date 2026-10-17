@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { readJson, writeOk } from '@/lib/api-client'
+import { readJson } from '@/lib/api-client'
 
 type AlertItem = {
   id: string

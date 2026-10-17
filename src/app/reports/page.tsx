@@ -22,16 +22,18 @@ export default function ReportsPage() {
 
   async function fetchReports() {
     const data = await fetch('/api/reports').then(r => readJson<Report[]>(r)).catch(() => null)
-    setReports(Array.isArray(data) ? data : [])
+    return Array.isArray(data) ? data : []
   }
 
-  useEffect(() => { fetchReports() }, [])
+  useEffect(() => {
+    fetchReports().then(setReports)
+  }, [])
 
   async function generate() {
     setGenerating(true)
     try {
       const res = await fetch('/api/reports', { method: 'POST' })
-      if (await writeOk(res)) await fetchReports()
+      if (await writeOk(res)) setReports(await fetchReports())
     } finally {
       setGenerating(false)
     }

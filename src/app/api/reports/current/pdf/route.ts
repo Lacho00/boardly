@@ -21,7 +21,7 @@ export async function GET() {
   function drawHeader() {
     box(page, 0, H - 80, W, 80, C.hd)
     page.drawText('Dashboard Centralizado', { x: M, y: H - 50, size: 20, font: bold, color: clr(C.hf) })
-    page.drawText(`Reporte en vivo · ${new Date().toLocaleDateString('es', { year: 'numeric', month: 'long', day: 'numeric' } as any)}`, {
+    page.drawText(`Reporte en vivo · ${new Date().toLocaleDateString('es', { year: 'numeric', month: 'long', day: 'numeric' })}`, {
       x: M, y: H - 70, size: 10, font, color: clr(C.mt),
     })
     page.drawText(`${sites.length} sitios`, { x: W - M - 60, y: H - 50, size: 9, font, color: clr(C.mt) })
